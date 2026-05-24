@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "spi.h"
 #include "display.h"
+#include "buzzer.h"
 
 static ExitCode_t initBuzzerPins(void);
 static ExitCode_t initDisplayPins(void);
@@ -64,10 +65,19 @@ ExitCode_t init(void) {
 }
 
 ExitCode_t mainLoop(void) {
+    Buzzer_PlayDoubleBeep();
+    sleep_ms(3000);
+    Buzzer_PlayMarioLevelUp();
+    sleep_ms(3000);
+    Buzzer_PlayGoodSound();
+    sleep_ms(3000);
+    Buzzer_PlayBadSound();
+    sleep_ms(3000);
+
     while (1) {
         // playFullSound();
         // displayTest();
-        Test_Gya();
+        // Test_Gya();
     }
 
     return FAIL; // ideal, niciodata atins

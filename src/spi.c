@@ -1,5 +1,7 @@
 #include "spi.h"
 
+#include "hardware/spi.h"
+
 #include "display.h"
 #include "types.h"
 

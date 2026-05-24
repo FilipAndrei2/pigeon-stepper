@@ -40,6 +40,7 @@ add_executable(PIGEON_STEPPER
     main_funcs.c
     main.c
     test_funcs.c
+    spi.c
 )
 
 pico_set_program_name(PIGEON_STEPPER "SM_2026")

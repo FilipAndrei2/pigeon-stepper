@@ -8,9 +8,10 @@
 #include "types.h"
 #include "pinout.h"
 
-ExitCode_t Buzzer_PlayGoodSound();
 ExitCode_t Buzzer_PlayBadSound();
-
+ExitCode_t Buzzer_PlayDoubleBeep();
+ExitCode_t Buzzer_PlayGoodSound();
+ExitCode_t Buzzer_PlayMarioLevelUp();
 typedef struct {
     float clkdiv;
     uint16_t wrap;

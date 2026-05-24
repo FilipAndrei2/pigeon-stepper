@@ -122,7 +122,7 @@ static void Buzzer_PlayNote(const MusicalNote* note, uint32_t duration_ms);
 
 /// @brief Do, Mi, Sol la 120ms fiecare
 /// @return 
-ExitCode_t Buzzer_GoodSound() {
+ExitCode_t Buzzer_PlayGoodSound() {
     LOG("Ding\n");
 
     // obtinem mai intai lucrurile necesare
@@ -140,22 +140,22 @@ ExitCode_t Buzzer_GoodSound() {
 
 /// @brief MI4,  pause, MI5
 /// @return 
-ExitCode_t Buzzer_DoubleBeep() {
+ExitCode_t Buzzer_PlayDoubleBeep() {
     LOG("Double Beep Sound playing\n");
 
-    const MusicalNote E4 = Buzzer_MakeNote(NOTE_E4_FREQ);
     const MusicalNote E5 = Buzzer_MakeNote(NOTE_E5_FREQ);
+    const MusicalNote E6 = Buzzer_MakeNote(NOTE_E6_FREQ);
 
-    Buzzer_PlayNote(&E4, 120); 
+    Buzzer_PlayNote(&E5, 120); 
     sleep_ms(80);
-    Buzzer_PlayNote(&E5, 180);
+    Buzzer_PlayNote(&E6, 180);
     sleep_ms(20);
     return SUCCESS;
 }
 
 /// @brief E4 G4 E5
 /// @return 
-ExitCode_t Buzzer_MarioLevelUp() {
+ExitCode_t Buzzer_PlayMarioLevelUp() {
     LOG("Mario Level Up Sound playing\n");
 
     const MusicalNote E4 = Buzzer_MakeNote(NOTE_E4_FREQ);
@@ -174,7 +174,7 @@ ExitCode_t Buzzer_MarioLevelUp() {
 
 /// @brief SOL4 MI4 DO4
 /// @return 
-ExitCode_t Buzzer_BadSound() {
+ExitCode_t Buzzer_PlayBadSound() {
     // TODO: functia asta canta aceeasi melodie ca Buzzer_GoodSound, schimba notele ca sa transmita ca ceva rau s-a intamplat
     LOG("Ding\n");
 
