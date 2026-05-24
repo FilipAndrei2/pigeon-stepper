@@ -10,18 +10,18 @@
 #include "sm.h"
 #include "funcs.h"
 
-
 int main() {
-    LOG("Pornire program\n");
 
     if (init()) {
         LOG("main.c init(): Eroare de initializare\n");
-        return 67;
+        return EXIT_FAILURE;
     }
 
     if (mainLoop()) {
         LOG("main.c mainLoop(): Ceva rau s-a intamplat\n");
-        return 67;
+        return EXIT_FAILURE;
     }
+    
+    return EXIT_SUCCESS;
 
 }
