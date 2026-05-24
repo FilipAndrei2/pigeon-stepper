@@ -47,7 +47,7 @@ pico_set_program_version(SM_2026 "0.1")
 #pico_generate_pio_header(SM_2026 ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(SM_2026 1)
+pico_enable_stdio_uart(SM_2026 0)
 pico_enable_stdio_usb(SM_2026 1)
 
 # Add the standard library to the build

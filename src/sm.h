@@ -17,7 +17,7 @@ typedef enum : uint8_t {
 } ExitCode_t;  
 
 #ifdef __SM_DEBUG__
-    #define LOG(MSG) fprintf(MSG)
+    #define LOG(MSG) fprintf(stdout, MSG)
 #else
     #define LOG(MSG) do { } while (0);
 #endif

@@ -6,7 +6,7 @@
 #include "pinout.h"
 #include "params.h"
 
-static ExitCode_t initBuzzerPin() {
+static ExitCode_t initBuzzerPins() {
 
     // daca apelez gpio_set_function(...), 
     // nu mai am nevoie de apel catre gpio_init(uint gpio)
@@ -27,9 +27,17 @@ static ExitCode_t initBuzzerPin() {
     return SUCCESS;
 }
 
+static ExitCode_t initDisplayPins() {
+
+}
+
 ExitCode_t initPins() {
-    if (initBuzzerPin()) {
-        LOG("initBuzzer(): Nu s-a putut initializa buzzerul");
+    if (initBuzzerPins()) {
+        LOG("initBuzzerPins(): Nu s-a putut initializa buzzerul\n");
+    }
+
+    if (initDisplayPins()) {
+        LOG("initDisplayPins(): Nu s-a putut initializa displayul\n")
     }
 
     gpio_set_dir(BUZZER_IO, GPIO_OUT);

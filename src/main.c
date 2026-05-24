@@ -5,21 +5,21 @@
 #include "hardware/i2c.h"
 #include "hardware/pio.h"
 
-
+#define __SM_DEBUG__
 #include "sm.h"
 #include "funcs.h"
 
 
 int main() {
-    fprintf(stdout, "Pornire program\n");
+    LOG("Pornire program\n");
 
     if (init()) {
-        fprintf(stderr, "main.c init(): Eroare de initializare\n");
+        LOG("main.c init(): Eroare de initializare\n");
         return 67;
     }
 
     if (mainLoop()) {
-        fprintf(stderr, "main.c mainLoop(): Ceva rau s-a intamplat\n");
+        LOG("main.c mainLoop(): Ceva rau s-a intamplat\n");
         return 67;
     }
 
