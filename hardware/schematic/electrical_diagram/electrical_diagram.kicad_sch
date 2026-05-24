@@ -198,162 +198,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:C_Small"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.254)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "C"
-				(at 0.254 1.778 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "C_Small"
-				(at 0.254 -2.032 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Unpolarized capacitor, small symbol"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "capacitor cap"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "C_*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "C_Small_0_1"
-				(polyline
-					(pts
-						(xy -1.524 0.508) (xy 1.524 0.508)
-					)
-					(stroke
-						(width 0.3048)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.524 -0.508) (xy 1.524 -0.508)
-					)
-					(stroke
-						(width 0.3302)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "C_Small_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 2.032)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 2.032)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -2667,10 +2511,10 @@
 						(type background)
 					)
 				)
-				(pin input line
+				(pin output line
 					(at -10.16 2.54 0)
 					(length 2.54)
-					(name "A0"
+					(name "INT"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2678,42 +2522,6 @@
 						)
 					)
 					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "A1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 -2.54 0)
-					(length 2.54)
-					(name "A2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4185,18 +3993,6 @@
 		(uuid "0b21a65d-d20b-411e-920a-75c343ac5136")
 	)
 	(junction
-		(at 85.09 49.53)
-		(diameter 1.016)
-		(color 0 0 0 0)
-		(uuid "0f22151c-f260-4674-b486-4710a2c42a55")
-	)
-	(junction
-		(at 85.09 26.67)
-		(diameter 1.016)
-		(color 0 0 0 0)
-		(uuid "1831fb37-1c5d-42c4-b898-151be6fca9dc")
-	)
-	(junction
 		(at 105.41 26.67)
 		(diameter 1.016)
 		(color 0 0 0 0)
@@ -4237,18 +4033,6 @@
 		(diameter 1.016)
 		(color 0 0 0 0)
 		(uuid "fe8d9267-7834-48d6-a191-c8724b2ee78d")
-	)
-	(no_connect
-		(at 74.93 36.83)
-		(uuid "00f1806c-4158-494e-882b-c5ac9b7a930a")
-	)
-	(no_connect
-		(at 74.93 39.37)
-		(uuid "00f1806c-4158-494e-882b-c5ac9b7a930b")
-	)
-	(no_connect
-		(at 74.93 41.91)
-		(uuid "00f1806c-4158-494e-882b-c5ac9b7a930c")
 	)
 	(wire
 		(pts
@@ -4369,6 +4153,16 @@
 			(type default)
 		)
 		(uuid "1f3256a2-3b96-4a84-abaa-7432648c62b0")
+	)
+	(wire
+		(pts
+			(xy 74.93 36.83) (xy 74.93 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2248e68d-e416-4b06-8e9c-8f644aea5c6e")
 	)
 	(wire
 		(pts
@@ -4592,6 +4386,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 16.51) (xy 132.08 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69c38ef3-fb90-497a-96e1-dfe44cacbaef")
+	)
+	(wire
+		(pts
 			(xy 231.14 35.56) (xy 243.84 35.56)
 		)
 		(stroke
@@ -4649,6 +4453,16 @@
 			(type default)
 		)
 		(uuid "798c87bc-3ad1-440e-b1ad-6ac8141b44aa")
+	)
+	(wire
+		(pts
+			(xy 74.93 16.51) (xy 132.08 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b71f18c-8827-445d-a4b7-11680ac0351c")
 	)
 	(wire
 		(pts
@@ -4822,6 +4636,16 @@
 	)
 	(wire
 		(pts
+			(xy 132.08 60.96) (xy 144.78 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a455233f-cac0-44e0-a32a-8a628c37d0d2")
+	)
+	(wire
+		(pts
 			(xy 133.35 88.9) (xy 133.35 120.65)
 		)
 		(stroke
@@ -4952,57 +4776,7 @@
 	)
 	(wire
 		(pts
-			(xy 71.12 26.67) (xy 71.12 36.83)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "d4943e77-b82c-4b31-b869-1ebef0c1006a")
-	)
-	(wire
-		(pts
-			(xy 71.12 41.91) (xy 71.12 49.53)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "d4943e77-b82c-4b31-b869-1ebef0c1006b")
-	)
-	(wire
-		(pts
-			(xy 71.12 49.53) (xy 85.09 49.53)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "d4943e77-b82c-4b31-b869-1ebef0c1006c")
-	)
-	(wire
-		(pts
-			(xy 85.09 26.67) (xy 71.12 26.67)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "d4943e77-b82c-4b31-b869-1ebef0c1006d")
-	)
-	(wire
-		(pts
-			(xy 85.09 46.99) (xy 85.09 49.53)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "d773dac9-0643-4f25-9c16-c53483acc4da")
-	)
-	(wire
-		(pts
-			(xy 85.09 49.53) (xy 85.09 52.07)
+			(xy 85.09 46.99) (xy 85.09 52.07)
 		)
 		(stroke
 			(width 0)
@@ -5159,87 +4933,6 @@
 			(justify right bottom)
 		)
 		(uuid "dd6c1ab1-463a-460b-93e3-6e17d4c06611")
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 71.12 39.37 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0f7872a7-de47-41d5-a21f-9934102d3a5f")
-		(property "Reference" "C1"
-			(at 68.7958 38.2206 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100n"
-			(at 68.7958 40.5193 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 71.12 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 71.12 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 71.12 39.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e13b4ec0-0b1a-4833-a57f-adf38fe98aef")
-		)
-		(pin "2"
-			(uuid "9ff3840e-e443-49e8-9fe8-411a314c02cc")
-		)
-		(instances
-			(project "electrical_diagram"
-				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-					(reference "C1")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "power:+3V3")
@@ -6341,12 +6034,6 @@
 		)
 		(pin "1"
 			(uuid "4a4c04f8-9fad-44aa-b889-3ba05bfe1829")
-		)
-		(pin "2"
-			(uuid "92ff6496-d5bf-4391-8e29-389f9740a2b4")
-		)
-		(pin "3"
-			(uuid "23be8951-fab0-4391-83a8-051cf896efdb")
 		)
 		(pin "4"
 			(uuid "3aada76c-13fb-41b7-89c4-85865e8d2c2d")
