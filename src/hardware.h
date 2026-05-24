@@ -4,7 +4,8 @@
 #include "sm.h"
 
 // SPI COMMUNICATION
-typedef enum : int{
+#define DISPLAY_SPI_PORT spi1
+typedef enum : int {
     // PENTRU CS
     SPI_START_COM   = 0,
     SPI_END_COM     = 1,
@@ -15,15 +16,18 @@ typedef enum : int{
 } SpiCommunication_t;
 
 
-// Metodele clasei Buzzer 
+// Buzzer
 void playTone(float clkdiv,
                      uint16_t wrap,
                      uint16_t level,
                      uint32_t duration_ms);
 
-// TODO: Display Pixels Buffer si functii specifice
 
-#define DISPLAY_SPI_PORT spi1
+// Display
+#define DISPLAY_RESOLUTION_WIDTH    128U
+#define DISPLAY_RESOLUTION_HEIGHT   160U
+#define RGB_SIZE                      2U
+extern uint8_t displayBuffer[DISPLAY_RESOLUTION_WIDTH * DISPLAY_RESOLUTION_HEIGHT * RGB_SIZE];
 
 #ifdef __SM_DEBUG__
     ExitCode_t playFullSound(void);
