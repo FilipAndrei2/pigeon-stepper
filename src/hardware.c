@@ -1,9 +1,10 @@
+#define __SM_DEBUG__
+
 #include "sm.h"
 #include "hardware.h"
 #include "pinout.h"
 #include "params.h"
 #include "hardware/pwm.h"
-
 
 void playTone(float clkdiv,
                      uint16_t wrap,
@@ -28,6 +29,10 @@ void playTone(float clkdiv,
     sleep_ms(20);
 }
 
+#ifdef __SM_DEBUG__
+
+// Functii de test pentru componente
+
 ExitCode_t playFullSound() {
     playTone(BUZZER_PWM_CLK_DIV_C5, BUZZER_PWM_WRAP_C5, BUZZER_PWM_LEVEL_C5, 120); 
     playTone(BUZZER_PWM_CLK_DIV_E5, BUZZER_PWM_WRAP_E5, BUZZER_PWM_LEVEL_E5, 120); 
@@ -35,3 +40,9 @@ ExitCode_t playFullSound() {
     return SUCCESS;
 }
 
+ExitCode_t displayTest() {
+
+    return SUCCESS;
+}
+
+#endif // __SM_DEBUG__
