@@ -5,7 +5,7 @@
 #include "hardware/i2c.h"
 #include "hardware/pio.h"
 
-
+#include "hardware.h"
 #include "sm.h"
 #include "funcs.h"
 
@@ -19,6 +19,7 @@ int main() {
     }
 
     if (mainLoop()) {
+        playFullSound();
         fprintf(stderr, "main.c mainLoop(): Ceva rau s-a intamplat\n");
         return 67;
     }

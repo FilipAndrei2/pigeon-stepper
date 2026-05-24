@@ -5,9 +5,11 @@
 
 // Metodele clasei Buzzer 
 
-// Functia asta blocheaza tot.. s-ar putea sa avem nevoie sa implementam un clock
-ExitCode_t playSound(size_t duration);
-
+ExitCode_t playFullSound(void);
+void playTone(float clkdiv,
+                     uint16_t wrap,
+                     uint16_t level,
+                     uint32_t duration_ms);
 
 
 #endif // __HARDWARE_H__
