@@ -6,7 +6,7 @@
 // Metodele clasei Buzzer 
 
 // Functia asta blocheaza tot.. s-ar putea sa avem nevoie sa implementam un clock
-ExitCode playSound(size_t duration);
+ExitCode_t playSound(size_t duration);
 
 
 

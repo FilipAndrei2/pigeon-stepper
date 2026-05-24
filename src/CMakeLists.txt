@@ -57,6 +57,7 @@ target_link_libraries(SM_2026
     hardware_i2c
     hardware_pio
     pico_cyw43_arch_none
+    hardware_pwm
 )
 
 # Add the standard include files to the build

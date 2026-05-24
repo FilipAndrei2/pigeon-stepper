@@ -2,12 +2,8 @@
 #include "hardware.h"
 #include "pinout.h"
 
-ExitCode playSound(size_t duration) {
-    while (duration) {
-        gpio_put(BUZZER_IO, 1);
-        duration--;
-    }
+#include "hardware/pwm.h"
 
-    gpio_put(BUZZER_IO, 0); 
-
+ExitCode_t playSound(size_t duration) {
+    
 }

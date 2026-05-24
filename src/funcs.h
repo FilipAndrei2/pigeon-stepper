@@ -11,7 +11,7 @@
 
 #include "sm.h"
 
-ExitCode init(void);
-ExitCode mainLoop(void);
+ExitCode_t init(void);
+ExitCode_t mainLoop(void);
 
 #endif // __FUNCS_H__
