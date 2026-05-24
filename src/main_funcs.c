@@ -3,12 +3,76 @@
 
 #define __SM_DEBUG__
 
-#include "sm.h"
-#include "funcs.h"
-#include "hardware.h"
-#include "gyroaccel.h"
-#include "pinout.h"
+#include "main_funcs.h"
+#include "gya.h"
 #include "params.h"
+#include "pinout.h"
+#include "test_funcs.h"
+#include "utils.h"
+#include "spi.h"
+#include "display.h"
+
+static ExitCode_t initBuzzerPins(void);
+static ExitCode_t initDisplayPins(void);
+static void initGyroaccelPins(void);
+static ExitCode_t initPins(void);
+static ExitCode_t activateInternalPullUpResistors(void);
+static ExitCode_t initDisplayController();
+
+// @returns FALSE for succes, TRUE on error
+ExitCode_t init(void) {
+    stdio_init_all(); // s-ar putea sa vrem sa verificam si codul de eroare
+
+    
+#ifdef __SM_DEBUG__
+    // Asteapta pana usb e conectat
+    while (!stdio_usb_connected()) {
+        sleep_ms(100);
+    }
+    LOG("USB conectat!\n");
+#endif
+
+    if (cyw43_arch_init()) { // initializeaza  wireless
+        return FAIL;
+    }
+
+    if (SPI_PortInit()) {
+        return FAIL;
+    }
+
+    if (initPins()) {
+        return FAIL;
+    }
+    
+    activateInternalPullUpResistors();
+
+    // i2c gya port init
+    i2c_init(GYA_I2C_PORT, 
+        400 * 1000 // baudrate = 400Khz
+    );
+
+    if (initDisplayController() == FAIL) {
+        return FAIL;
+    }
+    
+    if (GYA_Init()) {
+        return FAIL;
+    }
+
+    
+    return SUCCESS;
+}
+
+ExitCode_t mainLoop(void) {
+    while (1) {
+        // playFullSound();
+        // displayTest();
+        Test_Gya();
+    }
+
+    return FAIL; // ideal, niciodata atins
+}
+
 
 static ExitCode_t initBuzzerPins() {
 
@@ -36,7 +100,7 @@ static ExitCode_t initDisplayPins() {
     return SUCCESS;
 }
 
-void initGyroaccelPins() {
+static void initGyroaccelPins(void) {
     gpio_set_function(GYA_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(GYA_SCL_PIN, GPIO_FUNC_I2C);
 
@@ -44,7 +108,7 @@ void initGyroaccelPins() {
     gpio_set_dir(GYA_INT_PIN, GPIO_IN);
 }
 
-ExitCode_t initPins() {
+static ExitCode_t initPins(void) {
     if (initBuzzerPins()) {
         LOG("initBuzzerPins(): Nu s-a putut initializa buzzerul\n");
     }
@@ -58,6 +122,14 @@ ExitCode_t initPins() {
     return SUCCESS;
 }
 
+static ExitCode_t activateInternalPullUpResistors() {
+
+    // activam rezistentele pull-up interne ale pico
+    gpio_pull_up(GYA_SDA_PIN);
+    gpio_pull_up(GYA_SCL_PIN);
+
+}
+
 static ExitCode_t initDisplayController() {
     // Dam un reset la pornire
     gpio_put(DISPLAY_RES, 0);
@@ -67,13 +139,13 @@ static ExitCode_t initDisplayController() {
 
     // Trimitem niste comenzi
     // TODO: da ti seama ce comenzi
-    displaySendCmd(0x11); 
+    Display_SendCmd(0x11); 
     sleep_ms(120);        
-    displaySendCmd(0x3A); 
-    displaySendData(0x05); 
-    displaySendCmd(0x36);
-    displaySendData(0x00); 
-    displaySendCmd(0x29);
+    Display_SendCmd(0x3A); 
+    Display_SendData(0x05); 
+    Display_SendCmd(0x36);
+    Display_SendData(0x00); 
+    Display_SendCmd(0x29);
     sleep_ms(20);
 
     return SUCCESS;
@@ -81,16 +153,16 @@ static ExitCode_t initDisplayController() {
 
 ExitCode_t displaySetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     // Setare limite coloane (X)
-    displaySendCmd(0x2A); // CASET
-    displaySendData(x0 >> 8); displaySendData(x0 & 0xFF);
-    displaySendData(x1 >> 8); displaySendData(x1 & 0xFF);
+    Display_SendCmd(0x2A); // CASET
+    Display_SendData(x0 >> 8); Display_SendData(x0 & 0xFF);
+    Display_SendData(x1 >> 8); Display_SendData(x1 & 0xFF);
 
     // Setare limite randuri (Y)
-    displaySendCmd(0x2B); // RASET
-    displaySendData(y0 >> 8); displaySendData(y0 & 0xFF);
-    displaySendData(y1 >> 8); displaySendData(y1 & 0xFF);
+    Display_SendCmd(0x2B); // RASET
+    Display_SendData(y0 >> 8); Display_SendData(y0 & 0xFF);
+    Display_SendData(y1 >> 8); Display_SendData(y1 & 0xFF);
 
-    displaySendCmd(0x2C); 
+    Display_SendCmd(0x2C); 
     
     return SUCCESS;
 }
@@ -136,62 +208,3 @@ ExitCode_t displaySendCmd(uint8_t cmd) {
     return SUCCESS;
 }
 
-// @returns FALSE for succes, TRUE on error
-ExitCode_t init(void) {
-    stdio_init_all(); // s-ar putea sa vrem sa verificam si codul de eroare
-
-
-
-    if (cyw43_arch_init()) { // initializeaza  wireless
-        return FAIL;
-    }
-
-    // spi display port init
-    spi_init(DISPLAY_SPI_PORT, 20 * 1000 * 1000); // 40 MHz
-    spi_set_format(DISPLAY_SPI_PORT, 8, SPI_CPOL_0, SPI_CPHA_0, SPI_MSB_FIRST);
-    
-    if (initPins()) {
-        return FAIL;
-    }
-
-    // activam rezistentele pull-up interne ale pico
-    gpio_pull_up(GYA_SDA_PIN);
-    gpio_pull_up(GYA_SCL_PIN);
-
-    // i2c gya port init
-    i2c_init(GYA_I2C_PORT, 
-        400 * 1000 // baudrate = 400Khz
-    );
-
-    // Secventa de init a displayului
-
-    if (initDisplayController() == FAIL) {
-        return FAIL;
-    }
-    
-    if (initGya()) {
-        return FAIL;
-    }
-
-#ifdef __SM_DEBUG__
-    // Asteapta pana usb e conectat
-    while (!stdio_usb_connected()) {
-        sleep_ms(100);
-    }
-    LOG("USB conectat!\n");
-#endif
-    
-    return SUCCESS;
-}
-
-ExitCode_t mainLoop(void) {
-    playFullSound();
-
-    while (1) {
-        // playFullSound();
-        // displayTest();
-        gyaTest();
-    }
-    
-    return SUCCESS;
-}

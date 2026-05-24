@@ -28,30 +28,32 @@ set(PICO_BOARD pico2_w CACHE STRING "Board type")
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(SM_2026 C CXX ASM)
+project(PIGEON_STEPPER C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-add_executable(SM_2026 
-    main.c 
-    funcs.c
-    sm.c
-    hardware.c
+add_executable(PIGEON_STEPPER 
+    buzzer.c
+    display.c
+    gya.c
+    main_funcs.c
+    main.c
+    test_funcs.c
 )
 
-pico_set_program_name(SM_2026 "SM_2026")
-pico_set_program_version(SM_2026 "0.1")
+pico_set_program_name(PIGEON_STEPPER "SM_2026")
+pico_set_program_version(PIGEON_STEPPER "0.1")
 
 # Generate PIO header
 #pico_generate_pio_header(SM_2026 ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(SM_2026 0)
-pico_enable_stdio_usb(SM_2026 1)
+pico_enable_stdio_uart(PIGEON_STEPPER 0)
+pico_enable_stdio_usb(PIGEON_STEPPER 1)
 
 # Add the standard library to the build
-target_link_libraries(SM_2026
+target_link_libraries(PIGEON_STEPPER
     pico_stdlib
     hardware_spi
     hardware_i2c
@@ -61,12 +63,10 @@ target_link_libraries(SM_2026
 )
 
 # Add the standard include files to the build
-target_include_directories(SM_2026 PRIVATE
+target_include_directories(PIGEON_STEPPER PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
 
-
-pico_add_extra_outputs(SM_2026)
-
+pico_add_extra_outputs(PIGEON_STEPPER)

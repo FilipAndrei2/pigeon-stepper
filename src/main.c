@@ -1,14 +1,16 @@
-#include "pico/cyw43_arch.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/i2c.h"
 #include "hardware/pio.h"
 
 #define __SM_DEBUG__
-#include "hardware.h"
-#include "sm.h"
-#include "funcs.h"
+#include "main_funcs.h"
+#include "types.h"
+#include "utils.h"
 
 int main() {
 

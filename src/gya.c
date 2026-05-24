@@ -1,24 +1,13 @@
-#ifndef _GYRO_ACCEL_H_
-#define _GYRO_ACCEL_H_
+#include "gya.h"
 
-#include "hardware/i2c.h"
-
-// AD0 = GND => I2C_ADDRESS = 0X68
-// AD0 - 3V3 => I2C_ADDRESS = 0X69 
-#define GYA_I2C_ADDR (0X68)
-
-#define GYA_I2C_PORT i2c1
-
-// Registrele interne ale MPU6050
-#define GYA_REG_PWR_MGMT_1   0x6B
-#define GYA_REG_ACCEL_XOUT_H 0x3B // Primul registru de date
+#include "utils.h"
 
 /// @brief 
 /// @param accel 
 /// @param gyro 
 /// @param temp poate sa fie NULL safely (nu se va intampla nimic)
 /// @return 
-static ExitCode_t gyaReadRaw(int16_t accel[3], int16_t gyro[3], int16_t *temp) {
+ExitCode_t GYA_ReadRaw(int16_t accel[3], int16_t gyro[3], int16_t *temp) {
     uint8_t buffer[14];
     uint8_t reg_start = GYA_REG_ACCEL_XOUT_H;
 
@@ -50,7 +39,7 @@ static ExitCode_t gyaReadRaw(int16_t accel[3], int16_t gyro[3], int16_t *temp) {
     return SUCCESS;
 }
 
-static ExitCode_t initGya() {
+ExitCode_t GYA_Init() {
     uint8_t buffer[2];
     buffer[0] = GYA_REG_PWR_MGMT_1; // Adresa registrului de power
     buffer[1] = 0x00;               // 0x00 scoate senzorul din Sleep Mode
@@ -65,5 +54,3 @@ static ExitCode_t initGya() {
 
     return SUCCESS;
 }
-
-#endif // _GYRO_ACCEL_H_
