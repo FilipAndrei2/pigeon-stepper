@@ -32,6 +32,7 @@ extern uint8_t displayBuffer[DISPLAY_RESOLUTION_WIDTH * DISPLAY_RESOLUTION_HEIGH
 #ifdef __SM_DEBUG__
     ExitCode_t playFullSound(void);
     ExitCode_t displayTest(void);
+    ExitCode_t gyaTest(void);
 #endif //__SM_DEBUG__
 
 #endif // __HARDWARE_H__

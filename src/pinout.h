@@ -7,18 +7,19 @@
 */
 
 // Buzzer pins
-#define BUZZER_IO            (0)
+#define BUZZER_IO               (0)
 
 // Display pins
-#define DISPLAY_CLK         (14)
-#define DISPLAY_SDA         (15)
-#define DISPLAY_CS          (13)
+#define DISPLAY_CLK             (14)
+#define DISPLAY_SDA             (15)
+#define DISPLAY_CS              (13)
 
-#define DISPLAY_RES         (21)
-#define DISPLAY_DC          (22)
+#define DISPLAY_RES             (21)
+#define DISPLAY_DC              (22)
 
 // GYA pins
 #define GYA_SCL_PIN             (7)
 #define GYA_SDA_PIN             (6)
+#define GYA_INT_PIN             (4)
 
 #endif // __PINOUT_H_

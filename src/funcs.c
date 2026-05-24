@@ -39,6 +39,9 @@ static ExitCode_t initDisplayPins() {
 void initGyroaccelPins() {
     gpio_set_function(GYA_SDA_PIN, GPIO_FUNC_I2C);
     gpio_set_function(GYA_SCL_PIN, GPIO_FUNC_I2C);
+
+    gpio_init(GYA_INT_PIN);
+    gpio_set_dir(GYA_INT_PIN, GPIO_IN);
 }
 
 ExitCode_t initPins() {
@@ -56,6 +59,14 @@ ExitCode_t initPins() {
 }
 
 static ExitCode_t initDisplayController() {
+    // Dam un reset la pornire
+    gpio_put(DISPLAY_RES, 0);
+    sleep_ms(50);
+    gpio_put(DISPLAY_RES, 1);
+    sleep_ms(120);    
+
+    // Trimitem niste comenzi
+    // TODO: da ti seama ce comenzi
     displaySendCmd(0x11); 
     sleep_ms(120);        
     displaySendCmd(0x3A); 
@@ -67,13 +78,14 @@ static ExitCode_t initDisplayController() {
 
     return SUCCESS;
 }
+
 ExitCode_t displaySetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
     // Setare limite coloane (X)
     displaySendCmd(0x2A); // CASET
     displaySendData(x0 >> 8); displaySendData(x0 & 0xFF);
     displaySendData(x1 >> 8); displaySendData(x1 & 0xFF);
 
-    // Setare limite rânduri (Y)
+    // Setare limite randuri (Y)
     displaySendCmd(0x2B); // RASET
     displaySendData(y0 >> 8); displaySendData(y0 & 0xFF);
     displaySendData(y1 >> 8); displaySendData(y1 & 0xFF);
@@ -128,6 +140,8 @@ ExitCode_t displaySendCmd(uint8_t cmd) {
 ExitCode_t init(void) {
     stdio_init_all(); // s-ar putea sa vrem sa verificam si codul de eroare
 
+
+
     if (cyw43_arch_init()) { // initializeaza  wireless
         return FAIL;
     }
@@ -150,23 +164,34 @@ ExitCode_t init(void) {
     );
 
     // Secventa de init a displayului
-    gpio_put(DISPLAY_RES, 0);
-    sleep_ms(50);
-    gpio_put(DISPLAY_RES, 1);
-    sleep_ms(120);    
+
     if (initDisplayController() == FAIL) {
         return FAIL;
     }
     
+    if (initGya()) {
+        return FAIL;
+    }
+
+#ifdef __SM_DEBUG__
+    // Asteapta pana usb e conectat
+    while (!stdio_usb_connected()) {
+        sleep_ms(100);
+    }
+    LOG("USB conectat!\n");
+#endif
     
     return SUCCESS;
 }
 
 ExitCode_t mainLoop(void) {
+    playFullSound();
+
     while (1) {
         // playFullSound();
-
-        displayTest();
+        // displayTest();
+        gyaTest();
     }
+    
     return SUCCESS;
 }

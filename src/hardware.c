@@ -7,6 +7,7 @@
 #include "hardware.h"
 #include "pinout.h"
 #include "params.h"
+#include "gyroaccel.h"
 
 void playTone(float clkdiv,
                      uint16_t wrap,
@@ -36,6 +37,7 @@ void playTone(float clkdiv,
 // Functii de test pentru componente
 
 ExitCode_t playFullSound() {
+    LOG("Ding\n");
     playTone(BUZZER_PWM_CLK_DIV_C5, BUZZER_PWM_WRAP_C5, BUZZER_PWM_LEVEL_C5, 120); 
     playTone(BUZZER_PWM_CLK_DIV_E5, BUZZER_PWM_WRAP_E5, BUZZER_PWM_LEVEL_E5, 120); 
     playTone(BUZZER_PWM_CLK_DIV_G5, BUZZER_PWM_WRAP_G5, BUZZER_PWM_LEVEL_G5, 180); 
@@ -59,6 +61,17 @@ ExitCode_t displayTest() {
     }
 
     return SUCCESS;
+}
+
+ExitCode_t gyaTest(void) {
+    int16_t acceleratie[3], giroscop[3], temperatura;
+    gyaReadRaw(acceleratie, giroscop, &temperatura);
+
+    VLOG("Acceleratie: %d %d %d\n ", acceleratie[0], acceleratie[1], acceleratie[2]);
+    VLOG("Giroscop: %d %d %d\n ", giroscop[0], giroscop[1], giroscop[2]);
+    VLOG("Temperatura: %d\n", temperatura);
+
+    sleep_ms(1500);
 }
 
 #endif // __SM_DEBUG__
