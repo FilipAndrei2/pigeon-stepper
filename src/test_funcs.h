@@ -1,6 +1,7 @@
 #ifndef _PS_TEST_FUNCS_H_
 #define _PS_TEST_FUNCS_H_
 
+#include "pigeon_stepper.h"
 #include "types.h"
 
 

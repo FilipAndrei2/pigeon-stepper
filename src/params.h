@@ -1,6 +1,8 @@
 #ifndef __SM_PARAMS__
 #define __SM_PARAMS__
 
+#include "pigeon_stepper.h"
+
 /*
     f_PWM = f_clock / (clkdivider * (wrap + 1))
 

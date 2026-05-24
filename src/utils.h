@@ -1,6 +1,8 @@
 #ifndef _PS_UTILS_H_
 #define _PS_UTILS_H_
 
+#include "pigeon_stepper.h"
+
 #include <stddef.h>
 #include "pico/stdlib.h"
 

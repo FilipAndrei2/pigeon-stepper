@@ -1,3 +1,5 @@
+#include "pigeon_stepper.h"
+
 #include "test_funcs.h"
 
 #include "pico/stdlib.h"

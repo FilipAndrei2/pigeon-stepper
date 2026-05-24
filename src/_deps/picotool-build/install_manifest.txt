@@ -1,0 +1,7 @@
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/picotool
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/picotoolTargets.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/picotoolTargets-release.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/picotoolConfig.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/picotoolConfigVersion.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/enc_bootloader.elf
+/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool/enc_bootloader_mbedtls.elf

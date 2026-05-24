@@ -1,3 +1,4 @@
+#include "pigeon_stepper.h"
 #include "hardware/pwm.h"
 #include "hardware/i2c.h"
 
@@ -24,8 +25,7 @@ static ExitCode_t initDisplayController();
 ExitCode_t init(void) {
     stdio_init_all(); // s-ar putea sa vrem sa verificam si codul de eroare
 
-    
-#ifdef __SM_DEBUG__
+#ifdef _PS_WAIT_4_USB_
     // Asteapta pana usb e conectat
     while (!stdio_usb_connected()) {
         sleep_ms(100);

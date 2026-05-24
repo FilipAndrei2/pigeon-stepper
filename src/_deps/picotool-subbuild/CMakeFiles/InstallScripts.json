@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/nightfelep/Repos/pigeon-stepper/src/_deps/picotool-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

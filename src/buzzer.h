@@ -1,7 +1,7 @@
 #ifndef _PS_BUZZER_H_
 #define _PS_BUZZER_H_
 
-#include "buzzer.h"
+#include "pigeon_stepper.h"
 
 #include "hardware/clocks.h"
 

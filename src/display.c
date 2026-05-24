@@ -1,3 +1,4 @@
+#include "pigeon_stepper.h"
 #include "display.h"
 
 ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {

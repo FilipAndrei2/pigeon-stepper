@@ -1,0 +1,7 @@
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/pioasm.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/edit_cache.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/rebuild_cache.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/list_install_components.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/install.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/install/local.dir
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm/CMakeFiles/install/strip.dir

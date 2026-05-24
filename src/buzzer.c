@@ -1,3 +1,4 @@
+#include "pigeon_stepper.h"
 #include "buzzer.h"
 
 #include "hardware/clocks.h"

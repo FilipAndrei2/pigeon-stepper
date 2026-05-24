@@ -1,6 +1,8 @@
 #ifndef _MAIN_FUNCS_H_
 #define _MAIN_FUNCS_H_
 
+#include "pigeon_stepper.h"
+
 #include <stdio.h>
 
 #include "pico/cyw43_arch.h"

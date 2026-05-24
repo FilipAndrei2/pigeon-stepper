@@ -1,6 +1,8 @@
 #ifndef __PINOUT_H__
 #define __PINOUT_H_
 
+#include "pigeon_stepper.h"
+
 /*
     TODO: REDENUMESTE CONSTANTELE ASTA SA URMEZE CONVENTIA
     NUMEDEVICE_NUMEPIN_PIN
@@ -21,5 +23,13 @@
 #define GYA_SCL_PIN             (7)
 #define GYA_SDA_PIN             (6)
 #define GYA_INT_PIN             (4)
+
+// 3-Button module pins
+#define BTN_B1_PIN		(18)
+#define BTN_B2_PIN		(16)
+#define BTN_B3_PIN		(17)
+
+// Haptic driver pins
+#define HAPTIC_PWM_PIN		(1)
 
 #endif // __PINOUT_H_

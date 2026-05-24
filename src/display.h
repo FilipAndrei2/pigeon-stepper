@@ -1,6 +1,8 @@
 #ifndef _PS_DISPLAY_H_
 #define _PS_DISPLAY_H_
 
+#include "pigeon_stepper.h"
+
 #include "types.h"
 
 ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len);

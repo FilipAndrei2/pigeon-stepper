@@ -1,6 +1,7 @@
 #ifndef _GYA_H_
 #define _GYA_H_
 
+#include "pigeon_stepper.h"
 #include "hardware/i2c.h"
 
 #include "types.h"

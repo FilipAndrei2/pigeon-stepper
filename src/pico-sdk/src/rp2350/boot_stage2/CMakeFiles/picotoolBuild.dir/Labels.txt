@@ -1,0 +1,14 @@
+# Target labels
+ picotoolBuild
+# Source files and their labels
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/CMakeFiles/picotoolBuild
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/CMakeFiles/picotoolBuild.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/CMakeFiles/picotoolBuild-complete.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-build.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-configure.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-download.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-install.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-mkdir.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-patch.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-test.rule
+/home/nightfelep/Repos/pigeon-stepper/src/pico-sdk/src/rp2350/boot_stage2/picotool/src/picotoolBuild-stamp/picotoolBuild-update.rule

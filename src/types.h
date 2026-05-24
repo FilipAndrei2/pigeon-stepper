@@ -1,6 +1,8 @@
 #ifndef _PS_TYPES_H_
 #define _PS_TYPES_H_
 
+#include "pigeon_stepper.h"
+
 #include <stdint.h>
 #include <stddef.h>
 

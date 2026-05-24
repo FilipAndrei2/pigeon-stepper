@@ -1,0 +1,5 @@
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm-install/pioasm/pioasm
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm-install/pioasm/pioasmTargets.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm-install/pioasm/pioasmTargets-release.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm-install/pioasm/pioasmConfig.cmake
+/home/nightfelep/Repos/pigeon-stepper/src/pioasm-install/pioasm/pioasmConfigVersion.cmake

@@ -1,3 +1,5 @@
+#include "pigeon_stepper.h"
+
 #include "spi.h"
 
 #include "hardware/spi.h"
