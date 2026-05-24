@@ -6,6 +6,7 @@
 #include "hardware/pio.h"
 
 #define __SM_DEBUG__
+#include "hardware.h"
 #include "sm.h"
 #include "funcs.h"
 

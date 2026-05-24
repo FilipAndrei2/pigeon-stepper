@@ -11,18 +11,7 @@ static ExitCode_t initBuzzerPins() {
     // daca apelez gpio_set_function(...), 
     // nu mai am nevoie de apel catre gpio_init(uint gpio)
     gpio_set_function(BUZZER_IO, GPIO_FUNC_PWM);
-
-    uint slice = pwm_gpio_to_slice_num(BUZZER_IO);
-
-    pwm_config config = pwm_get_default_config();
-
-    pwm_config_set_clkdiv(&config, BUZZER_PWM_CLK_DIV);
-    pwm_config_set_wrap(&config, BUZZER_PWM_WRAP);
-
-    pwm_init(slice, &config, true);
-
-    // 1.5ms pulse
-    pwm_set_gpio_level(BUZZER_IO, BUZZER_PWM_LEVEL); // FIXME: muta ma unde tb
+    
 
     return SUCCESS;
 }
@@ -60,11 +49,7 @@ ExitCode_t init(void) {
 }
 
 ExitCode_t mainLoop(void) {
-    while (TRUE) {
-        if (playSound(150000000)) {
-            fprintf(stderr, "Nu s-a putut canta\n");
-        }
-    }
+    playFullSound();
 
     return SUCCESS;
 }
