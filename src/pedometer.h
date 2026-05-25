@@ -4,8 +4,14 @@
 #include "pigeon_stepper.h"
 
 
-typedef struct Pedometer Pedometer;
 // Tine state-ul pedometrului
+typedef 
+struct  {
+	size_t level;
+	size_t steps;
+	size_t reqSteps4LevelUp;
+} Pedometer;
+
 
 void Pedometer_Init(Pedometer* this);
 void Pedometer_AddStep(Pedometer* this);

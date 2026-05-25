@@ -15,6 +15,8 @@
 #include "buzzer.h"
 #include "haptic.h"
 #include "button.h"
+#include "pedometer.h"
+
 
 static ExitCode_t initBuzzerPins(void);
 static ExitCode_t initDisplayPins(void);
@@ -22,6 +24,12 @@ static void initGyroaccelPins(void);
 static ExitCode_t initPins(void);
 static ExitCode_t activateInternalPullUpResistors(void);
 static ExitCode_t initDisplayController();
+
+////////////////////////////////////////////////////////////////////////////////
+///                     GLOBALE (iertati-ne doamna Serban)
+////////////////////////////////////////////////////////////////////////////////
+Stepper      s_stepper   ;
+Pedometer    s_pedometer ;
 
 // @returns FALSE for succes, TRUE on error
 ExitCode_t init(void) {
@@ -67,31 +75,25 @@ ExitCode_t init(void) {
 
     Buttons_Init();
     
+    // initializari obiecte
+    Stepper_Init(&s_stepper);
+    Pedometer_Init(&s_pedometer);
+    
     return SUCCESS;
 }
 
 ExitCode_t mainLoop(void) {
-
-    // Alocăm un buffer pentru un rând întreg de pixeli.
-    uint8_t row_buffer[DISPLAY_WIDTH_PX * 2];
-    // Buzzer_PlayMarioLevelUp();
-    sleep_ms(400);
-
-    Haptic_Vibrate(670, 9000);
-    sleep_ms(1000);
-
-    Buzzer_PlayMarioLevelUp();
-    sleep_ms(400);
-
-    Haptic_Vibrate(670, 9000);
-    sleep_ms(500);
-    Buzzer_PlayMarioLevelUp();
-
-    sleep_ms(1000);
     
-    Haptic_Vibrate(1000, 50000);
-
+    uint8_t row_buffer[DISPLAY_WIDTH_PX * DISPLAY_WIDTH_PX *2];
+    Buzzer_PlayStartupSound();
     while (1) {
+        
+        if (Stepper_DetectStep(&s_stepper)) {
+            Pedometer_AddStep(&s_pedometer);
+        }
+
+
+        VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
 
         // 1. Setezi zona de desen (tot ecranul)
         // Atenție: coordonatele maxime sunt lățime-1 și înălțime-1 (0-239, 0-319)

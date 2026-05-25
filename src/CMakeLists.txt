@@ -47,6 +47,7 @@ add_executable(PIGEON_STEPPER
     main_funcs.c
     main.c
     test_funcs.c
+    pedometer.c
     spi.c
 )
 

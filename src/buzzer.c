@@ -121,6 +121,35 @@ const float NOTE_B7_FREQ  = 3951.07f;
 // Private
 static void Buzzer_PlayNote(const MusicalNote* note, uint32_t duration_ms);
 
+// C4  C#4  D4  D#4  E4  F4
+void Buzzer_PlayStartupSound() {
+    const MusicalNote C4    = Buzzer_MakeNote(NOTE_C4_FREQ);
+    const MusicalNote CS4   = Buzzer_MakeNote(NOTE_CS4_FREQ);
+    const MusicalNote D4    = Buzzer_MakeNote(NOTE_D4_FREQ);
+    const MusicalNote DS4   = Buzzer_MakeNote(NOTE_DS4_FREQ);
+    const MusicalNote E4    = Buzzer_MakeNote(NOTE_E4_FREQ);
+    const MusicalNote F4    = Buzzer_MakeNote(NOTE_F4_FREQ);
+
+
+    Buzzer_PlayNote(&C4, 120); 
+    sleep_ms(40);
+
+    Buzzer_PlayNote(&CS4, 120); 
+    sleep_ms(40);
+    
+    Buzzer_PlayNote(&D4, 120); 
+    sleep_ms(40);
+
+    Buzzer_PlayNote(&DS4, 120); 
+    sleep_ms(40);
+
+    Buzzer_PlayNote(&E4, 120); 
+    sleep_ms(40);
+
+    Buzzer_PlayNote(&F4, 120); 
+    sleep_ms(150);
+}
+
 /// @brief Do, Mi, Sol la 120ms fiecare
 /// @return 
 ExitCode_t Buzzer_PlayGoodSound() {
@@ -184,9 +213,9 @@ ExitCode_t Buzzer_PlayBadSound() {
     const MusicalNote E4 = Buzzer_MakeNote(NOTE_E4_FREQ);
     const MusicalNote G4 = Buzzer_MakeNote(NOTE_G4_FREQ);
 
-    Buzzer_PlayNote(&C4, 120); 
-    Buzzer_PlayNote(&E4, 120); 
     Buzzer_PlayNote(&G4, 180); 
+    Buzzer_PlayNote(&E4, 120); 
+    Buzzer_PlayNote(&C4, 120); 
     sleep_ms(20);
     return SUCCESS;
 }

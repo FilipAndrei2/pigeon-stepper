@@ -1,13 +1,6 @@
 #include "pedometer.h"
 
 
-struct Pedometer {
-	size_t level;
-	size_t steps;
-	size_t reqSteps4LevelUp;
-};
-
-static void Pedometer_LevelUp(Pedometer* this);
 
 void Pedometer_Init(Pedometer* this) {
 	this->level = 0u;
@@ -31,9 +24,9 @@ int Pedometer_ShouldLevelUp(Pedometer* this) {
 	return this->steps >= this->reqSteps4LevelUp;
 }
 
-static void Pedometer_LevelUp(Pedometer* this) {
+void Pedometer_LevelUp(Pedometer* this) {
 	this->steps = this->steps - this->reqSteps4LevelUp;
 	this->level += 1;
 	size_t tmp =  (size_t)(this->reqSteps4LevelUp * 1.25f);
-	this->reqSteps4LevelUp = tmp < reqSteps4LevelUp ? reqSteps4LevelUp : tmp;
+	this->reqSteps4LevelUp = tmp < this->reqSteps4LevelUp ? this->reqSteps4LevelUp : tmp;
 }

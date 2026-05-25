@@ -16,7 +16,13 @@
 #define GYA_REG_PWR_MGMT_1   0x6B
 #define GYA_REG_ACCEL_XOUT_H 0x3B // Primul registru de date
 
-typedef struct Stepper Stepper;
+typedef struct {
+    int16_t lastAccel[3], curAccel[3];
+    int16_t lastGyro[3], curGyro[3];
+
+    double lastMag, curMag;
+    uint32_t lastStepTime;
+}Stepper ;
 /// @returns number of steps detected
 void Stepper_Init(Stepper* this); // Apeleaza-l dupa GYA_Init()
 uint32_t Stepper_DetectStep(Stepper* this);

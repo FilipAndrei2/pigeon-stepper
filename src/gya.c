@@ -4,13 +4,7 @@
 #include "utils.h"
 #include <math.h>
 
-struct Stepper {
-    int16_t lastAccel[3], curAccel[3];
-    int16_t lastGyro[3], curGyro[3];
 
-    double lastMag, curMag;
-    uint32_t lastStepTime;
-};
 
 static double calculateMagnitude(Stepper* this) {
     return sqrt(this->curAccel[0] * this->curAccel[0] + this->curAccel[1] * this->curAccel[1] + this->curAccel[2] * this->curAccel[2]);

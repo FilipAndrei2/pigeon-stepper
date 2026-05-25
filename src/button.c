@@ -5,11 +5,14 @@
 
 #include "haptic.h"
 #include "buzzer.h"
+#include "pedometer.h"
 #include "pinout.h"
 #include "utils.h"
 
 #include "hardware/gpio.h"
 #include "pico/stdlib.h"
+ 
+extern Pedometer s_pedometer;
 
 void Buttons_Init(void){
     gpio_init(BTN_B1_PIN);
@@ -54,9 +57,14 @@ void Button1_CallBack(uint gpio, uint32_t events) {
 
 void Button2_CallBack(uint gpio, uint32_t events) {
     LOG("Button2 pressed\n");
-    Buzzer_PlayMarioLevelUp();
-    sleep_ms(1000);
-    Haptic_Vibrate(1000, 30000);
+
+    if (Pedometer_ShouldLevelUp(&s_pedometer)) {
+        Buzzer_PlayMarioLevelUp();
+        Pedometer_LevelUp(&s_pedometer);
+    } else {
+        Buzzer_PlayBadSound();
+        Haptic_Vibrate(1000, 30000);
+    }
     sleep_ms(100);
 }
 

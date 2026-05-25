@@ -12,6 +12,8 @@ ExitCode_t Buzzer_PlayBadSound();
 ExitCode_t Buzzer_PlayDoubleBeep();
 ExitCode_t Buzzer_PlayGoodSound();
 ExitCode_t Buzzer_PlayMarioLevelUp();
+void       Buzzer_PlayStartupSound();
+
 typedef struct {
     float clkdiv;
     uint16_t wrap;
