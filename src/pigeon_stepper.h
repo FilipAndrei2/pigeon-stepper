@@ -8,4 +8,13 @@
 #define _PS_WAIT_4_USB_
 #endif // _PS_DEBUG_
 
+#include "types.h"
+#include "utils.h"
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <stddef.h>
+
+#include "pico/stdlib.h"
+
 #endif // _PS_PIGEON_STEPPER_H_

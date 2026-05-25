@@ -2,6 +2,69 @@
 #include "gya.h"
 
 #include "utils.h"
+#include <math.h>
+
+struct Stepper {
+    int16_t lastAccel[3], curAccel[3];
+    int16_t lastGyro[3], curGyro[3];
+
+    double lastMag, curMag;
+    uint32_t lastStepTime;
+};
+
+static double calculateMagnitude(Stepper* this) {
+    return sqrt(this->curAccel[0] * this->curAccel[0] + this->curAccel[1] * this->curAccel[1] + this->curAccel[2] * this->curAccel[2]);
+}
+
+static int shouldStep(Stepper* this) {
+
+// NOTE: Mai creste thresholdul asta daca detecteaza prea multi pasi
+#define THRESHOLD 300 
+    return this->curMag > THRESHOLD &&
+        this->lastMag <= THRESHOLD &&
+        to_ms_since_boot(get_absolute_time()) - this->lastStepTime >= 300; 
+#undef THRESHOLD
+}
+
+static void nextRead(Stepper* this) {
+    this->lastMag = this->curMag;
+
+    for (int i = 0; i < 3; ++i) {
+        this->lastAccel[i] = this->curAccel[i];
+        this->lastGyro[i]  = this->curGyro[i];
+    }
+
+    GYA_ReadRaw(this->curAccel, this->curGyro, NULL);
+
+    this->curMag = calculateMagnitude(this);
+}
+
+void Stepper_Init(Stepper* this) {
+    int16_t accel[3], gyro[3];
+    GYA_ReadRaw(accel, gyro, NULL);
+
+    for (int i = 0; i < 3; ++i) {
+        this->lastAccel[i] = accel[i];
+        this->curAccel[i] = accel[i];
+
+        this->lastGyro[i] = gyro[i];
+        this->curGyro[i] = gyro[i];
+    }
+
+    this->lastMag = calculateMagnitude(this);
+    this->curMag = this->lastMag;
+    this->lastStepTime = to_ms_since_boot(get_absolute_time());
+}
+
+uint32_t Stepper_DetectStep(Stepper* this) {
+    // realist nu poate sa detecteze decat 1 pas.
+    nextRead(this);
+    if (shouldStep(this)) {
+        this->lastStepTime = to_ms_since_boot(get_absolute_time());
+        return 1;
+    }
+    return 0;
+}
 
 /// @brief 
 /// @param accel 
