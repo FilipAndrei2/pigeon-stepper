@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\worker\pigeon-stepper\src\CMakeFiles\568ddc145959c8f43f155790bb644569\cyw43_bus_pio_spi.pio.h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\worker\pigeon-stepper\src\CMakeFiles\3b8c8e53fbf5c7dec07c6a7399c321e6\cyw43_driver_picow_cyw43_bus_pio_spi_pio_h.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\worker\.pico-sdk\sdk\2.2.0\src\rp2_common\pico_cyw43_driver\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\worker\pigeon-stepper\src\pico-sdk\src\rp2_common\pico_cyw43_driver\CMakeFiles\cyw43_driver_picow_cyw43_bus_pio_spi_pio_h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C43FE6C8-4733-3CAA-95FE-F9E25B1A766E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -25,4 +25,6 @@
 #define BUZZER_PWM_WRAP_G5         2490
 #define BUZZER_PWM_LEVEL_G5        1245
 
+#define DISPLAY_WIDTH_PX           128
+#define DISPLAY_HEIGHT_PX          160
 #endif // __SM_PARAMS__

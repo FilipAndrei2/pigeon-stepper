@@ -3,17 +3,23 @@
 
 #include "pigeon_stepper.h"
 
-#include <stddef.h>
 #include "pico/stdlib.h"
+#include <stddef.h>
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef _PS_DEBUG_
-    #define LOG(MSG)      fprintf(stdout, MSG)
-    #define VLOG(MSG, ...) fprintf(stdout, MSG, __VA_ARGS__)
+#define LOG(MSG) fprintf(stdout, MSG)
+#define VLOG(MSG, ...) fprintf(stdout, MSG, __VA_ARGS__)
 #else
-    #define LOG(MSG)      do { } while (0);
-    #define VLOG(MSG, ...) do { } while (0);
+#define LOG(MSG)                                                               \
+  do {                                                                         \
+  } while (0);
+#define VLOG(MSG, ...)                                                         \
+  do {                                                                         \
+  } while (0);
 #endif
 
 #endif // _PS_UTILS_H_

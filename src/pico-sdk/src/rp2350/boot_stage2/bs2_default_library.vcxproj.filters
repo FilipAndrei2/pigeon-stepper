@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\worker\pigeon-stepper\src\CMakeFiles\bd902ba75048f8124a479316e6064522\bs2_default.bin.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\worker\pigeon-stepper\src\CMakeFiles\bd902ba75048f8124a479316e6064522\bs2_default_padded_checksummed.S.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\worker\.pico-sdk\sdk\2.2.0\src\rp2350\boot_stage2\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\worker\pigeon-stepper\src\pico-sdk\src\rp2350\boot_stage2\bs2_default_padded_checksummed.S" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C43FE6C8-4733-3CAA-95FE-F9E25B1A766E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

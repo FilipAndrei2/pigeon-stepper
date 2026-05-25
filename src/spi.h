@@ -1,5 +1,9 @@
+
+
 #ifndef _PS_SPI_H_
 #define _PS_SPI_H_
+
+#include "hardware/spi.h"
 
 #include "pigeon_stepper.h"
 
@@ -15,7 +19,7 @@ typedef enum : int {
     SPI_CMD_SEND    = 0,
     SPI_BUFFER_SEND = 1,
 } SpiCommunication_t;
-
+#define DISPLAY_SPI_PORT spi1
 ExitCode_t SPI_PortInit();
 
 #endif // _PS_SPI_H_

@@ -6,6 +6,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_C_COMPILER arm-none-eabi-g++)
+
 set(PICO_SDK_FETCH_FROM_GIT ON)
 
 # Initialise pico_sdk from installed location
@@ -36,9 +39,11 @@ project(PIGEON_STEPPER C CXX ASM)
 pico_sdk_init()
 
 add_executable(PIGEON_STEPPER 
+    button.c
     buzzer.c
     display.c
     gya.c
+    haptic.c
     main_funcs.c
     main.c
     test_funcs.c
