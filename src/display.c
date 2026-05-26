@@ -6,6 +6,31 @@
 #include "spi.h"
 #include "utils.h"
 
+void Frame_Init(Frame * this) {
+    this->state = PIGEON_IDLE;
+    this->level = level;
+    this->steps = steps;
+
+    this->backgroundColor = COLOR_BG;
+}
+
+void Frame_UpdatePigeon(Frame* this, PigeonState newState) {
+    this->state = newState;
+}
+
+void Frame_UpdateUi(Frame* this, size_t level, size_t steps) {
+    this->level = level;
+    this->steps = steps;
+}
+
+void Frame_DrawUi(Frame* this) {
+
+}
+
+void Frame_DrawPigeon(Frame* this) {
+
+}
+
 ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {
     gpio_put(DISPLAY_CS, SPI_START_COM);
     gpio_put(DISPLAY_DC, SPI_BUFFER_SEND); // DC = data

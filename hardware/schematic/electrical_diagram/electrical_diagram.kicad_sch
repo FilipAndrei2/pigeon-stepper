@@ -3918,7 +3918,7 @@
 	)
 	(text "Driver Haptic handmade"
 		(exclude_from_sim no)
-		(at 70.612 121.666 0)
+		(at 68.58 117.856 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3958,7 +3958,7 @@
 	)
 	(text "Dioda flyback"
 		(exclude_from_sim no)
-		(at 61.214 127.508 0)
+		(at 51.562 125.476 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3999,6 +3999,12 @@
 		(uuid "3cd1bda0-18db-417d-b581-a0c50623df68")
 	)
 	(junction
+		(at 64.77 130.81)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7258464d-3f51-4510-bf7e-bd8c8a25bd40")
+	)
+	(junction
 		(at 91.44 142.24)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4023,12 +4029,6 @@
 		(uuid "d57dcfee-5058-4fc2-a68b-05f9a48f685b")
 	)
 	(junction
-		(at 64.77 130.81)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ef7fe32e-64c8-4141-b4fc-b3ffc2d282e1")
-	)
-	(junction
 		(at 97.79 26.67)
 		(diameter 1.016)
 		(color 0 0 0 0)
@@ -4043,6 +4043,16 @@
 			(type default)
 		)
 		(uuid "037d07e0-1186-4e7f-835d-83ca57778518")
+	)
+	(wire
+		(pts
+			(xy 64.77 130.81) (xy 78.74 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "03cda163-b553-492d-b96c-279001947e53")
 	)
 	(wire
 		(pts
@@ -4403,16 +4413,6 @@
 			(type default)
 		)
 		(uuid "729d99d2-db79-4a49-b30c-a57b1b36422c")
-	)
-	(wire
-		(pts
-			(xy 64.77 130.81) (xy 78.74 130.81)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73ee4980-7c0b-4580-a175-e2ff11690cab")
 	)
 	(wire
 		(pts
@@ -7055,7 +7055,7 @@
 	)
 	(symbol
 		(lib_id "Diode:1N914")
-		(at 60.96 130.81 0)
+		(at 60.96 130.81 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7065,7 +7065,7 @@
 		(dnp no)
 		(uuid "bf3379d7-4152-4fe2-9439-257dcf9a4b31")
 		(property "Reference" "D1"
-			(at 60.706 137.414 0)
+			(at 61.214 124.206 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7075,7 +7075,7 @@
 			)
 		)
 		(property "Value" "1N914"
-			(at 59.436 134.874 0)
+			(at 62.484 126.746 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7085,7 +7085,7 @@
 			)
 		)
 		(property "Footprint" "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal"
-			(at 60.96 135.255 0)
+			(at 60.96 126.365 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

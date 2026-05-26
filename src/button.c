@@ -59,11 +59,13 @@ void Button2_CallBack(uint gpio, uint32_t events) {
     LOG("Button2 pressed\n");
 
     if (Pedometer_ShouldLevelUp(&s_pedometer)) {
-        Buzzer_PlayMarioLevelUp();
+        Buzzer_PlayMarioLevelUp();    
         Pedometer_LevelUp(&s_pedometer);
+        LOG("Level up la fierul pe care-l conduc\n");
     } else {
         Buzzer_PlayBadSound();
         Haptic_Vibrate(1000, 30000);
+        LOG("No level up\n");
     }
     sleep_ms(100);
 }
