@@ -6,7 +6,7 @@
 #include "spi.h"
 #include "utils.h"
 
-void Frame_Init(Frame * this) {
+void Frame_Init(Frame * this, size_t level, size_t steps) {
     this->state = PIGEON_IDLE;
     this->level = level;
     this->steps = steps;
@@ -23,8 +23,23 @@ void Frame_UpdateUi(Frame* this, size_t level, size_t steps) {
     this->steps = steps;
 }
 
-void Frame_DrawUi(Frame* this) {
+/// @brief Deseneaza doar 
+/// '''
+/// Level: 
+/// Steps:
+/// ''',
+/// fara a completa cu valorile din stateul jocului 
+/// @param  
+void Frame_DrawText(Frame* this) {
 
+}
+
+void Frame_DrawLevel(Frame* this) {
+
+}
+
+void Frame_DrawSteps(Frame* this) {
+    
 }
 
 void Frame_DrawPigeon(Frame* this) {
