@@ -46,6 +46,7 @@ typedef struct {
     size_t steps;
 
     uint16_t backgroundColor;
+    uint16_t pigeonBuffer[PIGEON_RESOLUTION_WIDTH * PIGEON_RESOLUTION_HEIGHT];
 } Frame;
 
 void Frame_Init(Frame * this, size_t level, size_t steps);

@@ -30,6 +30,7 @@ static ExitCode_t initDisplayController();
 ////////////////////////////////////////////////////////////////////////////////
 Stepper      s_stepper   ;
 Pedometer    s_pedometer ;
+Frame        s_frame     ;
 
 // @returns FALSE for succes, TRUE on error
 ExitCode_t init(void) {
@@ -79,54 +80,29 @@ ExitCode_t init(void) {
     Stepper_Init(&s_stepper);
     Pedometer_Init(&s_pedometer);
     
+    Frame_Init(&frame, Pedometer_GetLevel(), Pedometer_GetSteps());
+
     return SUCCESS;
 }
 
 ExitCode_t mainLoop(void) {
-    
-    uint8_t row_buffer[DISPLAY_WIDTH_PX * DISPLAY_WIDTH_PX *2];
+    PigeonState pigeonState = 0;
     Buzzer_PlayStartupSound();
     while (1) {
         
         if (Stepper_DetectStep(&s_stepper)) {
             Pedometer_AddStep(&s_pedometer);
         }
-
-
         VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
 
-        // // 1. Setezi zona de desen (tot ecranul)
-        // // Atenție: coordonatele maxime sunt lățime-1 și înălțime-1 (0-239, 0-319)
-        // Display_SetWindow(0, 0, DISPLAY_WIDTH_PX - 1, DISPLAY_HEIGHT_PX - 1);
+        pigeonState = (pigeonState + 1) % 3;
+        Frame_UpdatePigeon(&frame, pigeonState);
+        Frame_DrawPigeon(&frame);
+        
+        sleep_ms(2000);
 
-        // // 3. Start stream pixeli
-        // gpio_put(DISPLAY_CS, 0); // Chip Select pe LOW (activăm display-ul)
-        // gpio_put(DISPLAY_DC, 1); // Data/Command pe HIGH (trimitem date)
-
-        // // 4. Desenăm ecranul rând cu rând
-        // for (int y = 0; y < DISPLAY_HEIGHT_PX; y++) {
-            
-        //     // Umplem buffer-ul cu VERDE
-        //     for (int x = 0; x < DISPLAY_WIDTH_PX; x++) {
-        //         // 0x07e0
-        //         row_buffer[x * 2]     = 0x07;
-        //         row_buffer[x * 2 + 1] = 0xE0;
-        //     }
-
-        //     spi_write_blocking(DISPLAY_SPI_PORT, row_buffer, sizeof(row_buffer));
-        // }
-
-        // // 5. Finalizezi frame-ul
-        // gpio_put(DISPLAY_CS, 1); // Chip Select pe HIGH (dezactivăm display-ul)
-
-        // Așteptăm un pic înainte de următorul frame
-
-        // Canta o melodie ca sa simbolizeze next frame
     }
 
-if (!gpio_get(BTN_B2_PIN)) {
-        Buzzer_PlayMarioLevelUp();
-    }
     return FAIL; // Teoretic, bucla infinită nu ar trebui să ajungă niciodată aici
 }
 
