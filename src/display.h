@@ -41,17 +41,24 @@ typedef enum : uint8_t {
 } PigeonStates;
 
 typedef struct {
-    PigeonStates state;
-    size_t level;
-    size_t steps;
+    volatile PigeonStates state;
+    volatile size_t level;
+    volatile size_t steps;
 
-    uint16_t backgroundColor;
-    uint16_t pigeonBuffer[PIGEON_RESOLUTION_WIDTH * PIGEON_RESOLUTION_HEIGHT];
+    volatile uint16_t backgroundColor;
+    volatile uint16_t pigeonBuffer[PIGEON_RESOLUTION_WIDTH * PIGEON_RESOLUTION_HEIGHT];
 } Frame;
 
-void Frame_Init(Frame * this, size_t level, size_t steps);
-void Frame_UpdatePigeon(Frame* this, PigeonState newState);
-void Frame_UpdateUi(Frame* this, size_t level, size_t steps);
+
+size_t Frame_GetLevel(Frame *this); // operatie sincronizata
+size_t Frame_GetSteps(Frame *this); // op sinc
+PigeonStates Frame_GetPigeonState(Frame *this); // op sinc
+
+void Frame_Init(Frame * this, size_t level, size_t steps); // operatie sincronizata
+void Frame_UpdatePigeon(Frame* this, PigeonStates newState); // operatie sincronizata
+void Frame_UpdateLevel(Frame* this, size_t level); // operatie sincronizata
+void Frame_UpdateSteps(Frame* this, size_t steps); // operatie sincronizata
+
 void Frame_DrawPigeon(Frame * this);
 void Frame_DrawLevel(Frame* this);
 void Frame_DrawSteps(Frame* this)
@@ -63,14 +70,10 @@ ExitCode_t Display_SendCmd(uint8_t cmd);
 ExitCode_t Display_SendData(uint8_t data);
 ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 
-
-static inline void display_begin() {
-    gpio_put(DISPLAY_CS, 0);
-}
-
-static inline void display_end() {
-    gpio_put(DISPLAY_CS, 1);
-}
+// F: putin neortodoxe defineurile astea, dar am erori de compilare si 
+// tb sa ma duc si eu la culcare
+#define display_begin() gpio_put(DISPLAY_CS, 0)
+#define display_end() gpio_put(DISPLAY_CS, 1);
 
 ExitCode_t Display_WritePixels(const uint8_t* data, size_t len);
 
@@ -78,6 +81,5 @@ ExitCode_t Display_WritePixels(const uint8_t* data, size_t len);
 extern uint8_t g_displayBuffer[DISPLAY_RESOLUTION_WIDTH * DISPLAY_RESOLUTION_HEIGHT * DISPLAY_RGB_SIZE];
 
 #define DISPLAY_SPI_PORT spi1
-
 
 #endif // _PS_DISPLAY_H_

@@ -5,6 +5,7 @@
 
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "pico/multicore.h"
 #include "hardware/spi.h"
 #include "hardware/i2c.h"
 #include "hardware/pio.h"
@@ -20,6 +21,8 @@ int main() {
         LOG("main.c init(): Eroare de initializare\n");
         return EXIT_FAILURE;
     }
+    
+    multicore_launch_core1(displayLoop);
 
     if (mainLoop()) {
         LOG("main.c mainLoop(): Ceva rau s-a intamplat\n");

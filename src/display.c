@@ -1,12 +1,85 @@
 #include "pico/stdlib.h"
 
+#include "hardware/sync.h"
+
 #include "pigeon_stepper.h"
 #include "display.h"
 #include "pinout.h"
 #include "spi.h"
 #include "utils.h"
 
+//////////////////////////////////////////////////
+/// LOCKURI STATICE
+//////////////////////////////////////////////////
+spin_lock* s_stateLock = 0U;
+uint       s_stateLockNum = 0u;
+
+spin_lock* s_levelLock = 0U;
+uint       s_levelLockNum = 0u;
+
+spin_lock* s_stepsLock = 0U;
+uint       s_stepsLockNum = 0u;
+
+// Font (doar literele necesare L e v e l : S t p s
+static const uint8_t font5x7[96][5] = {
+    [' '] = {0,0,0,0,0},
+
+    ['L'] = {0x7F,0x08,0x08,0x08,0x07},
+    ['e'] = {0x3C,0x4A,0x4A,0x4A,0x30},
+    ['v'] = {0x08,0x10,0x20,0x10,0x08},
+    ['l'] = {0x00,0x41,0x7F,0x40,0x00},
+
+    ['S'] = {0x32,0x49,0x49,0x49,0x26},
+    ['t'] = {0x10,0x7E,0x10,0x10,0x00},
+    ['p'] = {0x7F,0x12,0x12,0x12,0x0C},
+
+    [':'] = {0x00,0x36,0x36,0x00,0x00},
+
+    ['0'] = {0x3E,0x51,0x49,0x45,0x3E},
+    ['1'] = {0x00,0x42,0x7F,0x40,0x00},
+    ['2'] = {0x42,0x61,0x51,0x49,0x46},
+    ['3'] = {0x21,0x41,0x45,0x4B,0x31},
+    ['4'] = {0x18,0x14,0x12,0x7F,0x10},
+    ['5'] = {0x27,0x45,0x45,0x45,0x39},
+    ['6'] = {0x3C,0x4A,0x49,0x49,0x30},
+    ['7'] = {0x01,0x71,0x09,0x05,0x03},
+    ['8'] = {0x36,0x49,0x49,0x49,0x36},
+    ['9'] = {0x06,0x49,0x49,0x29,0x1E},
+};
+
 // helpers
+static void put_pixel_txt(uint16_t* buf, int x, int y, uint16_t color) {
+    if (x < 0 || y < 0) return;
+    if (x >= DISPLAY_RESOLUTION_WIDTH) return;
+    if (y >= DISPLAY_RESOLUTION_HEIGHT) return;
+
+    buf[y * DISPLAY_RESOLUTION_WIDTH + x] = color;
+}
+
+static void draw_char(uint16_t* buf, int x, int y, char c, uint16_t color) {
+    if (c < 32 || c > 126) return;
+
+    const uint8_t* glyph = font5x7[(int)c];
+
+    for (int col = 0; col < 5; col++) {
+        uint8_t line = glyph[col];
+
+        for (int row = 0; row < 7; row++) {
+            if (line & (1 << row)) {
+                put_pixel_txt(buf, x + col, y + row, color);
+            }
+        }
+    }
+}
+
+static void draw_string(uint16_t* buf, int x, int y, const char* s, uint16_t color) {
+    while (*s) {
+        draw_char(buf, x, y, *s, color);
+        x += 6;
+        s++;
+    }
+}
+
 static inline void put_pixel(
     uint16_t* buf,
     int x,
@@ -111,21 +184,59 @@ static void draw_line(
     }
 }
 
+size_t Frame_GetLevel(Frame *this) {
+    uint32_t state = spin_lock_blocking(s_levelLock);
+    size_t level = this->level;
+    spin_unlock(s_levelLock, state);
+    return level;
+}
+
+size_t Frame_GetSteps(Frame *this) {
+    uint32_t state = spin_lock_blocking(s_stepsLock);
+    size_t steps = this->steps;
+    spin_unlock(s_stepsLock, state);
+    return steps;
+}
+
+PigeonStates Frame_GetPigeonState(Frame *this) {
+    uint32_t lockState = spin_lock_blocking(s_stateLock);
+    PigeonStates state = this->state;
+    spin_unlock(s_stateLock, lockState);
+    return state;
+}
+
 void Frame_Init(Frame * this, size_t level, size_t steps) {
     this->state = PIGEON_IDLE;
     this->level = level;
     this->steps = steps;
 
     this->backgroundColor = COLOR_BG;
+    s_stateLockNum = spin_lock_claim_unused(true);
+    s_stateLock = spin_lock_instance(s_stateLockNum);
+
+    s_levelLockNum = spin_lock_claim_unused(true);
+    s_levelLock = spin_lock_instance(s_levelLockNum);
+
+    s_stepsLockNum = spin_lock_claim_unused(true);
+    s_stepsLock = spin_lock_instance(s_stepsLockNum);
 }
 
 void Frame_UpdatePigeon(Frame* this, PigeonState newState) {
+    uint32_t state = spin_lock_blocking(s_stateLock);
     this->state = newState;
+    spin_unlock(s_stateLock, state);
 }
 
-void Frame_UpdateUi(Frame* this, size_t level, size_t steps) {
+void Frame_UpdateLevel(Frame* this, size_t level {
+    uint32_t state = spin_lock_blocking(s_levelLock);
     this->level = level;
+    spin_unlock(s_levelLock, state);
+}
+
+void Frame_UpdateSteps(Frame* this, size_t steps) {
+    uint32_t state = spin_lock_blocking(s_stepsLock);
     this->steps = steps;
+    spin_unlock(s_stepsLock, state);
 }
 
 /// @brief Deseneaza doar 
@@ -136,15 +247,38 @@ void Frame_UpdateUi(Frame* this, size_t level, size_t steps) {
 /// fara a completa cu valorile din stateul jocului 
 /// @param  
 void Frame_DrawText(Frame* this) {
+	void Frame_DrawText(Frame* this) {
+    uint16_t* buf = (uint16_t*)g_displayBuffer;
 
+    draw_string(buf, 2, 2, "Level:", COLOR_TEXT);
+    draw_string(buf, 2, 12, "Steps:", COLOR_TEXT);
 }
 
 void Frame_DrawLevel(Frame* this) {
+   uint32_t state = spin_lock_blocking(s_levelLock);
+    size_t level = this->level;
+    spin_unlock(s_levelLock, state);
 
+    uint16_t* buf = (uint16_t*)g_displayBuffer;
+
+    char tmp[16];
+    snprintf(tmp, sizeof(tmp), "%u", (unsigned)level);
+
+    draw_string(buf, 60, 2, tmp, COLOR_TEXT);
 }
 
 void Frame_DrawSteps(Frame* this) {
-    
+    uint32_t state = spin_lock_blocking(s_stepsLock);
+    size_t steps = this->steps;
+    spin_unlock(s_stepsLock, state);
+
+    uint16_t* buf = (uint16_t*)g_displayBuffer;
+
+    char tmp[16];
+    snprintf(tmp, sizeof(tmp), "%u", (unsigned)steps);
+
+    draw_string(buf, 60, 12, tmp, COLOR_TEXT);
+
 }
 
 void Frame_DrawPigeon(Frame* this) {
@@ -182,9 +316,10 @@ void Frame_DrawPigeon(Frame* this) {
         6,
         COLOR_PIGEON_NECK
     );
+    
 
     // aripa
-    switch (this->state) {
+    switch (Frame_GetPigeonState(this)) {
 
         case PIGEON_IDLE:
 
@@ -299,7 +434,6 @@ ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {
     gpio_put(DISPLAY_CS, SPI_START_COM);
     gpio_put(DISPLAY_DC, SPI_BUFFER_SEND); // DC = data
     
-    
     if (len != spi_write_blocking(DISPLAY_SPI_PORT, buffer, len)) {
         LOG("displaySendBuffer() eroare interna rpi sdk");
         return FAIL;
@@ -307,7 +441,7 @@ ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {
 
     // Dezactivam slave-ul spi
     gpio_put(DISPLAY_CS, SPI_END_COM);
-    return SUCCESS;
+    return SUCCESS;this->state
 } 
 
 ExitCode_t Display_SendCmd(uint8_t cmd) {
@@ -332,7 +466,7 @@ ExitCode_t Display_SendData(uint8_t data) {
 
     if (1 != spi_write_blocking(DISPLAY_SPI_PORT, &data, 1)) {
         LOG("displaySendData(): eroare interna rpi sdk");
-        gpio_put(DISPLAY_CS, 1); // Eliberăm magistrala și în caz de eroare!
+        gpio_put(DISPLAY_CS, 1); 
         return FAIL;
     }
 
@@ -361,7 +495,6 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
     uint8_t cmd;
     uint8_t data[4];
 
-    // Tragem CS pe LOW o singură dată pentru TOATA secventa!
     gpio_put(DISPLAY_CS, 0); 
 
     // --- CASET (Coloane) ---
@@ -373,7 +506,7 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
     gpio_put(DISPLAY_DC, 1); // Data mode
     spi_write_blocking(DISPLAY_SPI_PORT, data, 4);
 
-    // --- RASET (Rânduri) ---
+    // --- RASET (Randuri) ---
     cmd = 0x2B;
     data[0] = y0 >> 8; data[1] = y0 & 0xFF; 
     data[2] = y1 >> 8; data[3] = y1 & 0xFF;
@@ -382,12 +515,11 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
     gpio_put(DISPLAY_DC, 1);
     spi_write_blocking(DISPLAY_SPI_PORT, data, 4);
 
-    // --- RAMWR (Pregătire de pixeli) ---
+    // --- RAMWR (Pregatire de pixeli) ---
     cmd = 0x2C;
     gpio_put(DISPLAY_DC, 0);
     spi_write_blocking(DISPLAY_SPI_PORT, &cmd, 1);
 
-    // Gata, ridicăm CS-ul
     gpio_put(DISPLAY_CS, 1); 
 
     return SUCCESS;

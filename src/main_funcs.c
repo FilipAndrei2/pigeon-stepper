@@ -80,30 +80,49 @@ ExitCode_t init(void) {
     Stepper_Init(&s_stepper);
     Pedometer_Init(&s_pedometer);
     
-    Frame_Init(&frame, Pedometer_GetLevel(), Pedometer_GetSteps());
+    Frame_Init(&s_frame, Pedometer_GetLevel(), Pedometer_GetSteps());
 
     return SUCCESS;
 }
 
-ExitCode_t mainLoop(void) {
+void displayLoop(void) {
+
     PigeonState pigeonState = 0;
+    while (1) {
+        
+        pigeonState = (pigeonState + 1) % 3;
+
+        Frame_UpdatePigeon(&s_frame, pigeonState);
+        Frame_DrawPigeon(&s_frame);
+        
+        // nush exact daca e nevoie de delay, 
+        // activeaza in caz de flickering ig
+        // sleep_ms(100);
+    }
+}
+
+ExitCode_t mainLoop(void) {
+    PigeonState pigeonState = PIGEON_IDLE;
+
     Buzzer_PlayStartupSound();
     while (1) {
         
         if (Stepper_DetectStep(&s_stepper)) {
+            pigeonState = PIGEON_WINGS;
             Pedometer_AddStep(&s_pedometer);
+        } else {
+            pigeonState = PIGEON_IDLE;
         }
         VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
-
-        pigeonState = (pigeonState + 1) % 3;
-        Frame_UpdatePigeon(&frame, pigeonState);
-        Frame_DrawPigeon(&frame);
+        
+        Frame_UpdateState)&s_frame, pigeonState);
+        Frame_UpdateSteps(&s_frame, Pedometer_GetSteps(&s_pedometer);
+        Frame_UpdateLevel(&s_frame, Pedometer_GetLevel(&s_pedometer);
         
         sleep_ms(2000);
-
     }
 
-    return FAIL; // Teoretic, bucla infinită nu ar trebui să ajungă niciodată aici
+    return FAIL; // Teoretic, bucla infinita nu ar trebui să ajunga niciodata aici
 }
 
 static ExitCode_t initBuzzerPins() {

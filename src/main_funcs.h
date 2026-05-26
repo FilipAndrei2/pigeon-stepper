@@ -14,6 +14,7 @@
 #include "types.h"
 
 ExitCode_t init(void);
-ExitCode_t mainLoop(void);
+void displayLoop(void); // main loop core1
+ExitCode_t mainLoop(void); // main loop core0
 
 #endif // _MAIN_FUNCS_H_
