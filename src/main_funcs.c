@@ -95,32 +95,31 @@ ExitCode_t mainLoop(void) {
 
         VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
 
-        // 1. Setezi zona de desen (tot ecranul)
-        // Atenție: coordonatele maxime sunt lățime-1 și înălțime-1 (0-239, 0-319)
-        Display_SetWindow(0, 0, DISPLAY_WIDTH_PX - 1, DISPLAY_HEIGHT_PX - 1);
+        // // 1. Setezi zona de desen (tot ecranul)
+        // // Atenție: coordonatele maxime sunt lățime-1 și înălțime-1 (0-239, 0-319)
+        // Display_SetWindow(0, 0, DISPLAY_WIDTH_PX - 1, DISPLAY_HEIGHT_PX - 1);
 
-        // 3. Start stream pixeli
-        gpio_put(DISPLAY_CS, 0); // Chip Select pe LOW (activăm display-ul)
-        gpio_put(DISPLAY_DC, 1); // Data/Command pe HIGH (trimitem date)
+        // // 3. Start stream pixeli
+        // gpio_put(DISPLAY_CS, 0); // Chip Select pe LOW (activăm display-ul)
+        // gpio_put(DISPLAY_DC, 1); // Data/Command pe HIGH (trimitem date)
 
-        // 4. Desenăm ecranul rând cu rând
-        for (int y = 0; y < DISPLAY_HEIGHT_PX; y++) {
+        // // 4. Desenăm ecranul rând cu rând
+        // for (int y = 0; y < DISPLAY_HEIGHT_PX; y++) {
             
-            // Umplem buffer-ul cu VERDE
-            for (int x = 0; x < DISPLAY_WIDTH_PX; x++) {
-                // 0x07e0
-                row_buffer[x * 2]     = 0x07;
-                row_buffer[x * 2 + 1] = 0xE0;
-            }
+        //     // Umplem buffer-ul cu VERDE
+        //     for (int x = 0; x < DISPLAY_WIDTH_PX; x++) {
+        //         // 0x07e0
+        //         row_buffer[x * 2]     = 0x07;
+        //         row_buffer[x * 2 + 1] = 0xE0;
+        //     }
 
-            spi_write_blocking(DISPLAY_SPI_PORT, row_buffer, sizeof(row_buffer));
-        }
+        //     spi_write_blocking(DISPLAY_SPI_PORT, row_buffer, sizeof(row_buffer));
+        // }
 
-        // 5. Finalizezi frame-ul
-        gpio_put(DISPLAY_CS, 1); // Chip Select pe HIGH (dezactivăm display-ul)
+        // // 5. Finalizezi frame-ul
+        // gpio_put(DISPLAY_CS, 1); // Chip Select pe HIGH (dezactivăm display-ul)
 
         // Așteptăm un pic înainte de următorul frame
-        sleep_ms(100);
 
         // Canta o melodie ca sa simbolizeze next frame
     }

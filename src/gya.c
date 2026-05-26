@@ -7,17 +7,34 @@
 
 
 static double calculateMagnitude(Stepper* this) {
-    return sqrt(this->curAccel[0] * this->curAccel[0] + this->curAccel[1] * this->curAccel[1] + this->curAccel[2] * this->curAccel[2]);
+    double ax = this->curAccel[0] / 16384.0;
+    double ay = this->curAccel[1] / 16384.0;
+    double az = this->curAccel[2] / 16384.0;
+
+    return sqrt(ax * ax + ay * ay + az * az);
 }
 
 static int shouldStep(Stepper* this) {
 
-// NOTE: Mai creste thresholdul asta daca detecteaza prea multi pasi
-#define THRESHOLD 300 
-    return this->curMag > THRESHOLD &&
-        this->lastMag <= THRESHOLD &&
-        to_ms_since_boot(get_absolute_time()) - this->lastStepTime >= 300; 
-#undef THRESHOLD
+    static int inStep = 0;
+
+    double dynamic = fabs(this->curMag - this->baselineAcceleration);
+    uint32_t now = to_ms_since_boot(get_absolute_time());
+
+    if (!inStep &&
+        dynamic > MOVING_THRESHOLD &&
+        (now - this->lastStepTime) > MINIMUM_TIME_THRESHOLD)
+    {
+        inStep = 1;
+        this->lastStepTime = now;
+        return 1;
+    }
+
+    if (dynamic < STATIC_THRESHOLD) {
+        inStep = 0;
+    }
+
+    return 0;
 }
 
 static void nextRead(Stepper* this) {
@@ -31,6 +48,9 @@ static void nextRead(Stepper* this) {
     GYA_ReadRaw(this->curAccel, this->curGyro, NULL);
 
     this->curMag = calculateMagnitude(this);
+    VLOG("nextRead(): Last Accel: %zu %zu %zu; Cur Accel: %zu %zu %zu\n", this->lastAccel[0], this->lastAccel[1], this->lastAccel[2], this->curAccel[0], this->curAccel[1], this->curAccel[2]);
+
+    VLOG("nextRead(): Last Magnitude: %lf, Cur Magnitude: %lf\n", this->lastMag, this->curMag);
 }
 
 void Stepper_Init(Stepper* this) {
@@ -48,9 +68,11 @@ void Stepper_Init(Stepper* this) {
     this->lastMag = calculateMagnitude(this);
     this->curMag = this->lastMag;
     this->lastStepTime = to_ms_since_boot(get_absolute_time());
+    this->baselineAcceleration = this->curMag;
 }
 
 uint32_t Stepper_DetectStep(Stepper* this) {
+    LOG("Stepper_DetectStep()\n");
     // realist nu poate sa detecteze decat 1 pas.
     nextRead(this);
     if (shouldStep(this)) {
