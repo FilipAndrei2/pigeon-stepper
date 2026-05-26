@@ -18,7 +18,7 @@
 
 // Interfata publica
 
-enum Colors uint16_t {
+enum  : uint16_t {
     COLOR_BG    = 0X10A2,
     COLOR_TEXT  = 0xEF7D,
 
@@ -32,13 +32,13 @@ enum Colors uint16_t {
     COLOR_PIGEON_FEET       = 0XF9A8,
     COLOR_SKY_BG            = 0XAEDC,
     COLOR_CLOUD_WHITE       = 0XFFFF     
-};
+} Colors;
 
-enum PigeonStates uint8_t {
+typedef enum : uint8_t {
     PIGEON_IDLE = 0,
     PIGEON_WINGS,
     PIGEON_EAT
-};
+} PigeonStates;
 
 typedef struct {
     PigeonStates state;
@@ -52,7 +52,8 @@ void Frame_Init(Frame * this, size_t level, size_t steps);
 void Frame_UpdatePigeon(Frame* this, PigeonState newState);
 void Frame_UpdateUi(Frame* this, size_t level, size_t steps);
 void Frame_DrawPigeon(Frame * this);
-void Frame_DrawUi(Frame* this);
+void Frame_DrawLevel(Frame* this);
+void Frame_DrawSteps(Frame* this)
 
 // Nu folosi astea decat pentru test
 // TODO: Sterge-le pe astea din header ca sa nu fie accesibile din exterior
@@ -69,8 +70,6 @@ static inline void display_begin() {
 static inline void display_end() {
     gpio_put(DISPLAY_CS, 1);
 }
-
-
 
 ExitCode_t Display_WritePixels(const uint8_t* data, size_t len);
 
