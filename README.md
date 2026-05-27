@@ -9,9 +9,22 @@ sudo pacman -S \
   arm-none-eabi-newlib \
   cmake \
   ninja \
+  make \
   git \
-  base-devel   
+  base-devel
 ```
+
+Build from `/src`:
+```bash
+cd src
+cmake -S . -B build
+cmake --build build
+```
+
+Target board used in project CMake config: `pico2_w`.
+Main firmware sources are in `/src`.
+Hardware design files are in `/hardware`.
+
 # Links
 GY-521 Modul giroscop si accelerometru: https://www.snapeda.com/parts/GY-521/GODREAM%20FORDREAM%20CO.%2C%20LIMITED/view-part/?ref=search&t=GY%20521&ab_test_case=b
 
@@ -19,3 +32,7 @@ ST7735S Display LCD 1.8 inch: https://www.snapeda.com/parts/ST7735S/Sitronix/vie
 ST7735S Display LCD KiCad Symbol: https://github.com/dishishshawn/kicad-st7735s-1.8in-tft/tree/main/symbol
 
 Motor haptic generic KiCad Symbol: https://www.snapeda.com/parts/HD-LA0503-LW28/PUI%20Audio/view-part/?ref=search&t=haptic&ab_test_case=b
+
+Electrical diagram (KiCad): /hardware/schematic/electrical_diagram/electrical_diagram.kicad_sch
+PCB layout (KiCad): /hardware/schematic/electrical_diagram/electrical_diagram.kicad_pcb
+Raspberry Pi Pico 2 pinout image: /hardware/pinout/rpipico2.jpg
