@@ -17,7 +17,7 @@ sudo pacman -S \
 Build from `src`:
 ```bash
 cd src
-cmake -S . -B build
+cmake -S . -B build -G Ninja
 cmake --build build
 ```
 
