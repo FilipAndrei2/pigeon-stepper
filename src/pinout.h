@@ -25,11 +25,11 @@
 #define GYA_INT_PIN             (4)
 
 // 3-Button module pins
-#define BTN_B3_PIN		        (18)
 #define BTN_B1_PIN		        (16)
 #define BTN_B2_PIN		        (17)
+#define BTN_B3_PIN		        (18)
 
 // Haptic driver pins
-#define HAPTIC_PWM_PIN		    (1)
+#define HAPTIC_PWM_PIN		    (20)
 
 #endif // __PINOUT_H_

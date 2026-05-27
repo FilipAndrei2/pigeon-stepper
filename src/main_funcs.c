@@ -16,7 +16,7 @@
 #include "haptic.h"
 #include "button.h"
 #include "pedometer.h"
-
+#include "display.h"
 
 static ExitCode_t initBuzzerPins(void);
 static ExitCode_t initDisplayPins(void);
@@ -80,19 +80,19 @@ ExitCode_t init(void) {
     Stepper_Init(&s_stepper);
     Pedometer_Init(&s_pedometer);
     
-    Frame_Init(&s_frame, Pedometer_GetLevel(), Pedometer_GetSteps());
+    Frame_Init(&s_frame, Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
 
     return SUCCESS;
 }
 
 void displayLoop(void) {
 
-    PigeonState pigeonState = 0;
+    PigeonStates pigeonState = 0;
     while (1) {
         
         pigeonState = (pigeonState + 1) % 3;
 
-        Frame_UpdatePigeon(&s_frame, pigeonState);
+        Frame_UpdateState(&s_frame, pigeonState);
         Frame_DrawPigeon(&s_frame);
         
         // nush exact daca e nevoie de delay, 
@@ -102,9 +102,14 @@ void displayLoop(void) {
 }
 
 ExitCode_t mainLoop(void) {
-    PigeonState pigeonState = PIGEON_IDLE;
-
+    PigeonStates pigeonState = PIGEON_IDLE;
     Buzzer_PlayStartupSound();
+    Haptic_Vibrate(700, HAPTIC_VIBR_LOW);
+    sleep_ms(2000);
+    Haptic_Vibrate(700, HAPTIC_VIBR_MED);
+    sleep_ms(2000);
+    Haptic_Vibrate(700, HAPTIC_VIBR_HIGH);
+
     while (1) {
         
         if (Stepper_DetectStep(&s_stepper)) {
@@ -115,11 +120,10 @@ ExitCode_t mainLoop(void) {
         }
         VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
         
-        Frame_UpdateState)&s_frame, pigeonState);
-        Frame_UpdateSteps(&s_frame, Pedometer_GetSteps(&s_pedometer);
-        Frame_UpdateLevel(&s_frame, Pedometer_GetLevel(&s_pedometer);
+        Frame_UpdateState(&s_frame, pigeonState);
+        Frame_UpdateSteps(&s_frame, Pedometer_GetSteps(&s_pedometer));
+        Frame_UpdateLevel(&s_frame, Pedometer_GetLevel(&s_pedometer));
         
-        sleep_ms(2000);
     }
 
     return FAIL; // Teoretic, bucla infinita nu ar trebui să ajunga niciodata aici

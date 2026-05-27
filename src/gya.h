@@ -17,8 +17,11 @@
 #define GYA_REG_ACCEL_XOUT_H 0x3B // Primul registru de date
 
 #define MINIMUM_TIME_THRESHOLD 400
+
 #define STATIC_THRESHOLD 0.12
-#define MOVING_THRESHOLD 0.25 // Maybe 0.22
+
+#define MOVING_THRESHOLD 0.33
+
 typedef struct {
     int16_t lastAccel[3], curAccel[3];
     int16_t lastGyro[3], curGyro[3];

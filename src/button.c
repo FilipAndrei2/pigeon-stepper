@@ -27,51 +27,55 @@ void Buttons_Init(void){
     gpio_pull_up(BTN_B2_PIN);
     gpio_pull_up(BTN_B3_PIN);
 
-    gpio_set_irq_enabled_with_callback(
-        BTN_B1_PIN,                 // Pinul de monitorizat
-        GPIO_IRQ_EDGE_FALL,         // Evenimentul: declanșează doar când voltajul scade (EDGE_FALL)
-        true,                       // true = activează întreruperea
-        &Button1_CallBack           // Numele (adresa) funcției de mai sus
-    );
+gpio_set_irq_enabled_with_callback(
+    BTN_B1_PIN,
+    GPIO_IRQ_EDGE_FALL,
+    true,
+    &Button_Callback
+);
 
-    gpio_set_irq_enabled_with_callback(
-        BTN_B2_PIN,                 // Pinul de monitorizat
-        GPIO_IRQ_EDGE_FALL,         // Evenimentul: declanșează doar când voltajul scade (EDGE_FALL)
-        true,                       // true = activează întreruperea
-        &Button2_CallBack           // Numele (adresa) funcției de mai sus
-    );
+gpio_set_irq_enabled(
+    BTN_B2_PIN,
+    GPIO_IRQ_EDGE_FALL,
+    true
+);
 
-    gpio_set_irq_enabled_with_callback(
-        BTN_B3_PIN,             // Pinul de monitorizat
-        GPIO_IRQ_EDGE_FALL,     // Evenimentul: declanșează doar când voltajul scade (EDGE_FALL)
-        true,                   // true = activează întreruperea
-        &Button3_CallBack          // Numele (adresa) funcției de mai sus
-    );
+gpio_set_irq_enabled(
+    BTN_B3_PIN,
+    GPIO_IRQ_EDGE_FALL,
+    true
+);
+
+
 }
 
-void Button1_CallBack(uint gpio, uint32_t events) {
-    LOG("Button1 pressed\n");
-    Buzzer_PlayDoubleBeep();
-    sleep_ms(100);
-}
+static void Button_Callback(uint gpio, uint32_t events) {
 
-void Button2_CallBack(uint gpio, uint32_t events) {
-    LOG("Button2 pressed\n");
+    switch(gpio) {
 
-    if (Pedometer_ShouldLevelUp(&s_pedometer)) {
-        Buzzer_PlayMarioLevelUp();    
-        Pedometer_LevelUp(&s_pedometer);
-        LOG("Level up la fierul pe care-l conduc\n");
-    } else {
-        Buzzer_PlayBadSound();
-        Haptic_Vibrate(1000, 30000);
-        LOG("No level up\n");
+        case BTN_B1_PIN:
+            LOG("Button1 pressed\n");
+            Buzzer_PlayDoubleBeep();
+            break;
+
+        case BTN_B2_PIN:
+            LOG("Button2 pressed\n");
+
+            if (Pedometer_ShouldLevelUp(&s_pedometer)) {
+                Buzzer_PlayMarioLevelUp();
+                Pedometer_LevelUp(&s_pedometer);
+                LOG("Level up\n");
+            } else {
+                Buzzer_PlayBadSound();
+                Haptic_Vibrate(450, HAPTIC_VIBR_MED);
+                LOG("No level up\n");
+            }
+            break;
+
+        case BTN_B3_PIN:
+            Haptic_Vibrate(450, HAPTIC_VIBR_MED);
+            Buzzer_PlayBadSound();
+            LOG("Button3 pressed\n");
+            break;
     }
-    sleep_ms(100);
-}
-
-void Button3_CallBack(uint gpio, uint32_t events) {
-    LOG("Button3 pressed\n");
-    Haptic_Vibrate(1000, 30000);
-    sleep_ms(100);
 }

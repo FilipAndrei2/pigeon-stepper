@@ -9,37 +9,41 @@
 
 void Haptic_Init(void) {
     LOG("Haptic init\n");
+#ifdef _HAPTIC_NO_PWM_
+    gpio_init(HAPTIC_PWM_PIN);
+    gpio_set_dir(HAPTIC_PWM_PIN, GPIO_OUT);
+
+    gpio_put(HAPTIC_PWM_PIN, 1); // OFF default
+#else
     gpio_set_function(HAPTIC_PWM_PIN, GPIO_FUNC_PWM);
 
-    // Aflăm ce "motor" intern PWM (slice) controlează acest pin
-    uint slice_num = pwm_gpio_to_slice_num(HAPTIC_PWM_PIN);
+    uint slice = pwm_gpio_to_slice_num(HAPTIC_PWM_PIN);
 
-    // Setăm "rezoluția" PWM-ului (Wrap value). 
-    // Valoarea 65535 ne dă control foarte fin asupra intensității.
-    pwm_set_wrap(slice_num, 65535);
+    pwm_set_wrap(slice, 255);   // rezoluTie 8-bit
+    pwm_set_chan_level(slice, PWM_CHAN_A, 0);
 
-    // Pornim generatorul PWM (cu duty cycle 0 implicit)
-    pwm_set_chan_level(slice_num, pwm_gpio_to_channel(HAPTIC_PWM_PIN), 0);
-    pwm_set_enabled(slice_num, true);
+    pwm_set_enabled(slice, true);
+#endif
 }
 
 /// @brief 
 /// @param timeMs timpul cat sa vibreze 
-/// @param intensity intensitatea cat sa vibreze interval (0, 65535)
+/// @param intensity intensitatea cat sa vibreze interval (0, 255]
 /// @return 
-ExitCode_t Haptic_Vibrate(uint16_t timeMs, uint16_t intensity) {
-    VLOG("Haptic vibrate: intensity: %d\n", intensity);
-    uint slice_num = pwm_gpio_to_slice_num(HAPTIC_PWM_PIN);
-    uint chan = pwm_gpio_to_channel(HAPTIC_PWM_PIN);
+ExitCode_t Haptic_Vibrate(uint16_t timeMs, uint8_t intensity) {
+#ifdef _HAPTIC_NO_PWM_
+    (void)intensity; // nu se folosește pe hardware-ul tău
 
-    // PASUL A: Pornim vibrația setând Duty Cycle-ul
-    pwm_set_chan_level(slice_num, chan, intensity);
+    LOG("Haptic vibrate NO PWM\n");
 
-    // PASUL B: Așteptăm timpul dorit (ținem procesorul aici cât timp motorul merge)
+    gpio_put(HAPTIC_PWM_PIN, 0);  // ON
     sleep_ms(timeMs);
-
-    // PASUL C: Oprim motorul tăind Duty Cycle-ul înapoi la 0
-    pwm_set_chan_level(slice_num, chan, 0);
-
+    gpio_put(HAPTIC_PWM_PIN, 1);  // OFF
+#else
+    pwm_set_gpio_level(HAPTIC_PWM_PIN, intensity);
+        sleep_ms(timeMs);
+    pwm_set_gpio_level(HAPTIC_PWM_PIN, 0);
+    LOG("Haptic viBrate pwm");
+#endif
     return SUCCESS;
 }

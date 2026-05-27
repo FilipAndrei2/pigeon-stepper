@@ -69,6 +69,7 @@ target_link_libraries(PIGEON_STEPPER
     hardware_pio
     pico_cyw43_arch_none
     hardware_pwm
+    pico_multicore
 )
 
 # Add the standard include files to the build

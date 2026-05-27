@@ -11,17 +11,23 @@
 //////////////////////////////////////////////////
 /// LOCKURI STATICE
 //////////////////////////////////////////////////
-spin_lock* s_stateLock = 0U;
+spin_lock_t* s_stateLock = 0U;
 uint       s_stateLockNum = 0u;
 
-spin_lock* s_levelLock = 0U;
+spin_lock_t* s_levelLock = 0U;
 uint       s_levelLockNum = 0u;
 
-spin_lock* s_stepsLock = 0U;
+spin_lock_t* s_stepsLock = 0U;
 uint       s_stepsLockNum = 0u;
 
+///////////////
+//GLOBALE
+///////////////
+
+uint8_t g_displayBuffer [DISPLAY_RESOLUTION_WIDTH * DISPLAY_RESOLUTION_HEIGHT * DISPLAY_RGB_SIZE];
+
 // Font (doar literele necesare L e v e l : S t p s
-static const uint8_t font5x7[96][5] = {
+static const uint8_t font5x7[128][5] = {
     [' '] = {0,0,0,0,0},
 
     ['L'] = {0x7F,0x08,0x08,0x08,0x07},
@@ -81,7 +87,7 @@ static void draw_string(uint16_t* buf, int x, int y, const char* s, uint16_t col
 }
 
 static inline void put_pixel(
-    uint16_t* buf,
+    volatile uint16_t* buf,
     int x,
     int y,
     uint16_t color
@@ -93,7 +99,7 @@ static inline void put_pixel(
     buf[y * PIGEON_RESOLUTION_WIDTH + x] = (color << 8) | (color >> 8);
 }
 
-static void fill_bg(uint16_t* buf, uint16_t color) {
+static void fill_bg(volatile uint16_t* buf, uint16_t color) {
 
     for (size_t i = 0;
          i < PIGEON_RESOLUTION_WIDTH * PIGEON_RESOLUTION_HEIGHT;
@@ -104,7 +110,7 @@ static void fill_bg(uint16_t* buf, uint16_t color) {
 }
 
 static void draw_circle(
-    uint16_t* buf,
+    volatile uint16_t* buf,
     int cx,
     int cy,
     int r,
@@ -122,7 +128,7 @@ static void draw_circle(
 }
 
 static void draw_ellipse(
-    uint16_t* buf,
+    volatile uint16_t* buf,
     int cx,
     int cy,
     int rx,
@@ -147,7 +153,7 @@ static void draw_ellipse(
 }
 
 static void draw_line(
-    uint16_t* buf,
+    volatile uint16_t* buf,
     int x0,
     int y0,
     int x1,
@@ -221,13 +227,13 @@ void Frame_Init(Frame * this, size_t level, size_t steps) {
     s_stepsLock = spin_lock_instance(s_stepsLockNum);
 }
 
-void Frame_UpdatePigeon(Frame* this, PigeonState newState) {
+void Frame_UpdateState(Frame* this, PigeonStates newState) {
     uint32_t state = spin_lock_blocking(s_stateLock);
     this->state = newState;
     spin_unlock(s_stateLock, state);
 }
 
-void Frame_UpdateLevel(Frame* this, size_t level {
+void Frame_UpdateLevel(Frame* this, size_t level) {
     uint32_t state = spin_lock_blocking(s_levelLock);
     this->level = level;
     spin_unlock(s_levelLock, state);
@@ -247,7 +253,6 @@ void Frame_UpdateSteps(Frame* this, size_t steps) {
 /// fara a completa cu valorile din stateul jocului 
 /// @param  
 void Frame_DrawText(Frame* this) {
-	void Frame_DrawText(Frame* this) {
     uint16_t* buf = (uint16_t*)g_displayBuffer;
 
     draw_string(buf, 2, 2, "Level:", COLOR_TEXT);
@@ -283,15 +288,15 @@ void Frame_DrawSteps(Frame* this) {
 
 void Frame_DrawPigeon(Frame* this) {
 
-    fill_bg(s_pigeonBuffer, COLOR_SKY_BG);
+    fill_bg(this->pigeonBuffer, COLOR_SKY_BG);
 
     // nori
-    draw_circle(s_pigeonBuffer, 15, 10, 8, COLOR_CLOUD_WHITE);
-    draw_circle(s_pigeonBuffer, 23, 10, 8, COLOR_CLOUD_WHITE);
+    draw_circle(this->pigeonBuffer, 15, 10, 8, COLOR_CLOUD_WHITE);
+    draw_circle(this->pigeonBuffer, 23, 10, 8, COLOR_CLOUD_WHITE);
 
     // corp
     draw_ellipse(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         40,
         35,
         22,
@@ -301,7 +306,7 @@ void Frame_DrawPigeon(Frame* this) {
 
     // cap
     draw_circle(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         58,
         23,
         10,
@@ -310,7 +315,7 @@ void Frame_DrawPigeon(Frame* this) {
 
     // gat
     draw_circle(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         50,
         30,
         6,
@@ -324,7 +329,7 @@ void Frame_DrawPigeon(Frame* this) {
         case PIGEON_IDLE:
 
             draw_ellipse(
-                s_pigeonBuffer,
+                this->pigeonBuffer,
                 35,
                 35,
                 14,
@@ -337,7 +342,7 @@ void Frame_DrawPigeon(Frame* this) {
         case PIGEON_WINGS:
 
             draw_ellipse(
-                s_pigeonBuffer,
+                this->pigeonBuffer,
                 35,
                 24,
                 18,
@@ -350,7 +355,7 @@ void Frame_DrawPigeon(Frame* this) {
         case PIGEON_EAT:
 
             draw_ellipse(
-                s_pigeonBuffer,
+                this->pigeonBuffer,
                 35,
                 40,
                 15,
@@ -363,7 +368,7 @@ void Frame_DrawPigeon(Frame* this) {
 
     // ochi
     draw_circle(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         61,
         21,
         2,
@@ -371,7 +376,7 @@ void Frame_DrawPigeon(Frame* this) {
     );
 
     draw_circle(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         61,
         21,
         1,
@@ -380,7 +385,7 @@ void Frame_DrawPigeon(Frame* this) {
 
     // cioc
     draw_line(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         67,
         24,
         75,
@@ -389,7 +394,7 @@ void Frame_DrawPigeon(Frame* this) {
     );
 
     draw_line(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         67,
         25,
         75,
@@ -399,7 +404,7 @@ void Frame_DrawPigeon(Frame* this) {
 
     // picioare
     draw_line(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         35,
         49,
         33,
@@ -408,7 +413,7 @@ void Frame_DrawPigeon(Frame* this) {
     );
 
     draw_line(
-        s_pigeonBuffer,
+        this->pigeonBuffer,
         45,
         49,
         47,
@@ -425,8 +430,8 @@ void Frame_DrawPigeon(Frame* this) {
     );
 
     Display_WritePixels(
-        (uint8_t*)s_pigeonBuffer,
-        sizeof(s_pigeonBuffer)
+        (uint8_t*)this->pigeonBuffer,
+        sizeof(this->pigeonBuffer)
     );
 }
 
@@ -441,7 +446,7 @@ ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {
 
     // Dezactivam slave-ul spi
     gpio_put(DISPLAY_CS, SPI_END_COM);
-    return SUCCESS;this->state
+    return SUCCESS;
 } 
 
 ExitCode_t Display_SendCmd(uint8_t cmd) {
@@ -470,7 +475,7 @@ ExitCode_t Display_SendData(uint8_t data) {
         return FAIL;
     }
 
-    gpio_put(DISPLAY_CS, 1); // <--- Asta lipsea!
+    gpio_put(DISPLAY_CS, 1); 
     return SUCCESS;
 }
 
@@ -497,7 +502,7 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 
     gpio_put(DISPLAY_CS, 0); 
 
-    // --- CASET (Coloane) ---
+    // CASET (Coloane)
     cmd = 0x2A;
     data[0] = x0 >> 8; data[1] = x0 & 0xFF; 
     data[2] = x1 >> 8; data[3] = x1 & 0xFF;
@@ -506,7 +511,7 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
     gpio_put(DISPLAY_DC, 1); // Data mode
     spi_write_blocking(DISPLAY_SPI_PORT, data, 4);
 
-    // --- RASET (Randuri) ---
+    // RASET (Randuri)
     cmd = 0x2B;
     data[0] = y0 >> 8; data[1] = y0 & 0xFF; 
     data[2] = y1 >> 8; data[3] = y1 & 0xFF;
@@ -515,7 +520,7 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
     gpio_put(DISPLAY_DC, 1);
     spi_write_blocking(DISPLAY_SPI_PORT, data, 4);
 
-    // --- RAMWR (Pregatire de pixeli) ---
+    // RAMWR
     cmd = 0x2C;
     gpio_put(DISPLAY_DC, 0);
     spi_write_blocking(DISPLAY_SPI_PORT, &cmd, 1);

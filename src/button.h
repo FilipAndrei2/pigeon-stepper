@@ -9,8 +9,6 @@
 // Callbackurile
 void Buttons_Init();
 
-void Button1_CallBack(uint gpio, uint32_t events);
-void Button2_CallBack(uint gpio, uint32_t events);
-void Button3_CallBack(uint gpio, uint32_t events);
+static void Button_Callback(uint gpio, uint32_t events);
 
 #endif // _PS_BUTTON_H_
