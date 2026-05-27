@@ -9,7 +9,6 @@ sudo pacman -S \
   arm-none-eabi-newlib \
   cmake \
   ninja \
-  make \
   git \
   base-devel
 ```
@@ -33,6 +32,6 @@ ST7735S Display LCD KiCad Symbol: https://github.com/dishishshawn/kicad-st7735s-
 
 Motor haptic generic KiCad Symbol: https://www.snapeda.com/parts/HD-LA0503-LW28/PUI%20Audio/view-part/?ref=search&t=haptic&ab_test_case=b
 
-Electrical diagram (KiCad): hardware/schematic/electrical_diagram/electrical_diagram.kicad_sch
-PCB layout (KiCad): hardware/schematic/electrical_diagram/electrical_diagram.kicad_pcb
-Raspberry Pi Pico 2 pinout image: hardware/pinout/rpipico2.jpg
+Electrical diagram (KiCad): [hardware/schematic/electrical_diagram/electrical_diagram.kicad_sch](hardware/schematic/electrical_diagram/electrical_diagram.kicad_sch)
+PCB layout (KiCad): [hardware/schematic/electrical_diagram/electrical_diagram.kicad_pcb](hardware/schematic/electrical_diagram/electrical_diagram.kicad_pcb)
+Raspberry Pi Pico 2 pinout image: [hardware/pinout/rpipico2.jpg](hardware/pinout/rpipico2.jpg)
