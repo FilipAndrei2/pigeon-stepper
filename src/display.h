@@ -8,6 +8,12 @@
 
 // Display-ul 128 x 160
 // Pigeon     80 x 60
+#define TFT_CS   DISPLAY_CS
+#define TFT_DC   DISPLAY_DC
+#define TFT_RST  DISPLAY_RES
+#define TFT_SCK  DISPLAY_CLK
+#define TFT_MOSI DISPLAY_SDA
+#define TFT_ENABLE_FONTS
 
 #define DISPLAY_RESOLUTION_WIDTH            128U
 #define DISPLAY_RESOLUTION_HEIGHT           160U
@@ -55,6 +61,7 @@ size_t Frame_GetSteps(Frame *this); // op sinc
 PigeonStates Frame_GetPigeonState(Frame *this); // op sinc
 
 
+
 void Frame_Init(Frame * this, size_t level, size_t steps); // operatie sincronizata
 void Frame_UpdateState(Frame* this, PigeonStates newState); // operatie sincronizata
 void Frame_UpdateLevel(Frame* this, size_t level); // operatie sincronizata
@@ -63,9 +70,10 @@ void Frame_UpdateSteps(Frame* this, size_t steps); // operatie sincronizata
 void Frame_DrawPigeon(Frame * this);
 void Frame_DrawLevel(Frame* this);
 void Frame_DrawSteps(Frame* this);
-
+void Frame_DrawText(Frame *this);
 // Nu folosi astea decat pentru test
 // TODO: Sterge-le pe astea din header ca sa nu fie accesibile din exterior
+ExitCode_t Display_Init();
 ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len);
 ExitCode_t Display_SendCmd(uint8_t cmd);
 ExitCode_t Display_SendData(uint8_t data);
@@ -79,7 +87,5 @@ ExitCode_t Display_SetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 ExitCode_t Display_WritePixels(const uint8_t* data, size_t len);
 
 extern uint8_t g_displayBuffer [DISPLAY_RESOLUTION_HEIGHT * DISPLAY_RESOLUTION_WIDTH * DISPLAY_RGB_SIZE];
-
-#define DISPLAY_SPI_PORT spi1
 
 #endif // _PS_DISPLAY_H_

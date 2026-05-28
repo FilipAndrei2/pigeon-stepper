@@ -22,7 +22,7 @@ int main() {
         return EXIT_FAILURE;
     }
     
-    multicore_launch_core1(displayLoop);
+    // multicore_launch_core1(displayLoop);
 
     if (mainLoop()) {
         LOG("main.c mainLoop(): Ceva rau s-a intamplat\n");

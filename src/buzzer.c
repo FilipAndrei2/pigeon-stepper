@@ -177,9 +177,8 @@ ExitCode_t Buzzer_PlayDoubleBeep() {
     const MusicalNote E6 = Buzzer_MakeNote(NOTE_E6_FREQ);
 
     Buzzer_PlayNote(&E5, 120); 
-    sleep_ms(80);
+    sleep_ms(222);
     Buzzer_PlayNote(&E6, 180);
-    sleep_ms(20);
     return SUCCESS;
 }
 

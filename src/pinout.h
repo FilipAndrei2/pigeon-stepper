@@ -12,9 +12,9 @@
 #define BUZZER_IO               (0)
 
 // Display pins
-#define DISPLAY_CLK             (14)
-#define DISPLAY_SDA             (15)
-#define DISPLAY_CS              (13)
+#define DISPLAY_CLK             (18)
+#define DISPLAY_SDA             (19)
+#define DISPLAY_CS              (17)
 
 #define DISPLAY_RES             (21)
 #define DISPLAY_DC              (22)
@@ -25,9 +25,9 @@
 #define GYA_INT_PIN             (4)
 
 // 3-Button module pins
-#define BTN_B1_PIN		        (16)
-#define BTN_B2_PIN		        (17)
-#define BTN_B3_PIN		        (18)
+#define BTN_B1_PIN		        (13)
+#define BTN_B2_PIN		        (14)
+#define BTN_B3_PIN		        (15)
 
 // Haptic driver pins
 #define HAPTIC_PWM_PIN		    (20)

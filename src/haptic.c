@@ -13,7 +13,7 @@ void Haptic_Init(void) {
     gpio_init(HAPTIC_PWM_PIN);
     gpio_set_dir(HAPTIC_PWM_PIN, GPIO_OUT);
 
-    gpio_put(HAPTIC_PWM_PIN, 1); // OFF default
+    gpio_put(HAPTIC_PWM_PIN, 0); // OFF default
 #else
     gpio_set_function(HAPTIC_PWM_PIN, GPIO_FUNC_PWM);
 
@@ -32,13 +32,13 @@ void Haptic_Init(void) {
 /// @return 
 ExitCode_t Haptic_Vibrate(uint16_t timeMs, uint8_t intensity) {
 #ifdef _HAPTIC_NO_PWM_
-    (void)intensity; // nu se folosește pe hardware-ul tău
+    (void)intensity; // nu se foloseste
 
     LOG("Haptic vibrate NO PWM\n");
 
-    gpio_put(HAPTIC_PWM_PIN, 0);  // ON
+    gpio_put(HAPTIC_PWM_PIN, 1);  // ON
     sleep_ms(timeMs);
-    gpio_put(HAPTIC_PWM_PIN, 1);  // OFF
+    gpio_put(HAPTIC_PWM_PIN, 0);  // OFF
 #else
     pwm_set_gpio_level(HAPTIC_PWM_PIN, intensity);
         sleep_ms(timeMs);

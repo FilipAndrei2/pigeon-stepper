@@ -14,24 +14,67 @@ static double calculateMagnitude(Stepper* this) {
     return sqrt(ax * ax + ay * ay + az * az);
 }
 
-static int shouldStep(Stepper* this) {
-
+/*
+static int shouldStep(Stepper* this)
+{
     static int inStep = 0;
 
     double dynamic = fabs(this->curMag - this->baselineAcceleration);
     uint32_t now = to_ms_since_boot(get_absolute_time());
 
+    printf("dynamic=%f\n", dynamic);
+
+    // detectare pas
     if (!inStep &&
-        dynamic > MOVING_THRESHOLD &&
-        (now - this->lastStepTime) > MINIMUM_TIME_THRESHOLD)
+        dynamic > 0.015 &&
+        (now - this->lastStepTime) > 250)
     {
         inStep = 1;
+        this->lastStepTime = now;
+
+        return 1;
+    }
+
+    // iesire din step doar cand miscarea scade
+    if (inStep && dynamic < 0.008)
+    {
+        inStep = 0;
+    }
+
+    return 0;
+} */
+
+static int shouldStep(Stepper* this)
+{
+    static int armed = 1;
+
+    double dynamic =
+        fabs(this->curMag - this->baselineAcceleration);
+
+    uint32_t now =
+        to_ms_since_boot(get_absolute_time());
+
+    // baseline adaptiv
+    this->baselineAcceleration =
+        0.98 * this->baselineAcceleration +
+        0.02 * this->curMag;
+
+    printf("dyn=%f\n", dynamic);
+
+    // detectare peak
+    if (armed &&
+        dynamic > 0.045 &&
+        (now - this->lastStepTime) > 350)
+    {
+        armed = 0;
         this->lastStepTime = now;
         return 1;
     }
 
-    if (dynamic < STATIC_THRESHOLD) {
-        inStep = 0;
+    // rearm doar cand miscarea scade suficient
+    if (!armed && dynamic < 0.015)
+    {
+        armed = 1;
     }
 
     return 0;
@@ -48,7 +91,7 @@ static void nextRead(Stepper* this) {
     GYA_ReadRaw(this->curAccel, this->curGyro, NULL);
 
     this->curMag = calculateMagnitude(this);
-    VLOG("nextRead(): Last Accel: %zu %zu %zu; Cur Accel: %zu %zu %zu\n", this->lastAccel[0], this->lastAccel[1], this->lastAccel[2], this->curAccel[0], this->curAccel[1], this->curAccel[2]);
+    // VLOG("nextRead(): Last Accel: %zu %zu %zu; Cur Accel: %zu %zu %zu\n", this->lastAccel[0], this->lastAccel[1], this->lastAccel[2], this->curAccel[0], this->curAccel[1], this->curAccel[2]);
 
     VLOG("nextRead(): Last Magnitude: %lf, Cur Magnitude: %lf\n", this->lastMag, this->curMag);
 }

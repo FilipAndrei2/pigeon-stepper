@@ -55,26 +55,49 @@ static void Button_Callback(uint gpio, uint32_t events) {
 
         case BTN_B1_PIN:
             LOG("Button1 pressed\n");
-            Buzzer_PlayDoubleBeep();
-            break;
-
-        case BTN_B2_PIN:
-            LOG("Button2 pressed\n");
 
             if (Pedometer_ShouldLevelUp(&s_pedometer)) {
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
+
                 Buzzer_PlayMarioLevelUp();
                 Pedometer_LevelUp(&s_pedometer);
                 LOG("Level up\n");
             } else {
                 Buzzer_PlayBadSound();
-                Haptic_Vibrate(450, HAPTIC_VIBR_MED);
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
+                LOG("No level up\n");
+            }
+            break;
+
+
+        case BTN_B2_PIN:
+            LOG("Button2 pressed\n");
+
+            if (Pedometer_ShouldLevelUp(&s_pedometer)) {
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
+
+                Buzzer_PlayMarioLevelUp();
+                Pedometer_LevelUp(&s_pedometer);
+                LOG("Level up\n");
+            } else {
+                Buzzer_PlayBadSound();
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
                 LOG("No level up\n");
             }
             break;
 
         case BTN_B3_PIN:
-            Haptic_Vibrate(450, HAPTIC_VIBR_MED);
-            Buzzer_PlayBadSound();
+            if (Pedometer_ShouldLevelUp(&s_pedometer)) {
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
+
+                Buzzer_PlayMarioLevelUp();
+                Pedometer_LevelUp(&s_pedometer);
+                LOG("Level up\n");
+            } else {
+                Buzzer_PlayBadSound();
+                Haptic_Vibrate(250, HAPTIC_VIBR_MED);
+                LOG("No level up\n");
+            }
             LOG("Button3 pressed\n");
             break;
     }

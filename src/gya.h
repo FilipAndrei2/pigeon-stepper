@@ -16,11 +16,17 @@
 #define GYA_REG_PWR_MGMT_1   0x6B
 #define GYA_REG_ACCEL_XOUT_H 0x3B // Primul registru de date
 
-#define MINIMUM_TIME_THRESHOLD 400
+/*
+MOVING_THRESHOLD = 0.010
+STATIC_THRESHOLD = 0.005    
+*/
 
-#define STATIC_THRESHOLD 0.12
 
-#define MOVING_THRESHOLD 0.33
+#define MINIMUM_TIME_THRESHOLD 350
+
+#define STATIC_THRESHOLD0 0.015
+
+#define MOVING_THRESHOLD 0.045
 
 typedef struct {
     int16_t lastAccel[3], curAccel[3];
@@ -32,8 +38,8 @@ typedef struct {
 } Stepper;
 
 /// @returns number of steps detected
-void Stepper_Init(Stepper* this); // Apeleaza-l dupa GYA_Init()
-uint32_t Stepper_DetectStep(Stepper* this);
+void        Stepper_Init(Stepper* this); // Apeleaza-l dupa GYA_Init()
+uint32_t    Stepper_DetectStep(Stepper* this);
 
 ExitCode_t GYA_Init();
 

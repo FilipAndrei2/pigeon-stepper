@@ -449,6 +449,74 @@ ExitCode_t Display_SendBuffer(const uint8_t* buffer, size_t len) {
     return SUCCESS;
 } 
 
+static void initDisplayPins() {
+    gpio_set_function(DISPLAY_CLK, GPIO_FUNC_SPI);
+    gpio_set_function(DISPLAY_SDA, GPIO_FUNC_SPI);
+    
+    // DC, RES si CS trebuie initializat normal
+    gpio_init(DISPLAY_DC);
+    gpio_set_dir(DISPLAY_DC, GPIO_OUT);
+
+    gpio_init(DISPLAY_RES);
+    gpio_set_dir(DISPLAY_RES, GPIO_OUT);
+
+    gpio_init(DISPLAY_CS);
+    gpio_set_dir(DISPLAY_CS, GPIO_OUT);
+    
+    gpio_put(DISPLAY_CS, SPI_END_COM);
+    
+
+}
+
+ExitCode_t Display_Init() {
+
+    initDisplayPins();
+
+    gpio_put(DISPLAY_RES, 1);
+    sleep_ms(10);
+
+    gpio_put(DISPLAY_RES, 0);
+    sleep_ms(50);
+
+    gpio_put(DISPLAY_RES, 1);
+    sleep_ms(120);
+
+    Display_SendCmd(0x01); // SWRESET
+    sleep_ms(150);
+
+    Display_SendCmd(0x11); // SLPOUT
+    sleep_ms(120);
+
+    // --- SETARE CULOARE: COLMOD (0x3A) = 0x55 (16-bit) ---
+    gpio_put(DISPLAY_CS, 0); // CS LOW fix pentru această comandă + parametru
+    uint8_t cmd_colmod = 0x3A; 
+    uint8_t arg_colmod = 0x55; // RGB565
+    gpio_put(DISPLAY_DC, 0);
+    spi_write_blocking(DISPLAY_SPI_PORT, &cmd_colmod, 1);
+    gpio_put(DISPLAY_DC, 1);
+    spi_write_blocking(DISPLAY_SPI_PORT, &arg_colmod, 1);
+    gpio_put(DISPLAY_CS, 1); // CS HIGH
+
+    // --- SETARE ORIENTARE: MADCTL (0x36) = 0x00 ---
+    gpio_put(DISPLAY_CS, 0);
+    uint8_t cmd_madctl = 0x36;
+    uint8_t arg_madctl = 0x00;
+    gpio_put(DISPLAY_DC, 0);
+    spi_write_blocking(DISPLAY_SPI_PORT, &cmd_madctl, 1);
+    gpio_put(DISPLAY_DC, 1);
+    spi_write_blocking(DISPLAY_SPI_PORT, &arg_madctl, 1);
+    gpio_put(DISPLAY_CS, 1);
+
+    Display_SendCmd(0x21); // INVON (Inversare culori)
+    Display_SendCmd(0x13); // NORON (Normal display)
+    sleep_ms(10);
+    Display_SendCmd(0x29); // DISPON (Pornește ecranul)
+    sleep_ms(120);
+
+    return SUCCESS;
+}
+
+
 ExitCode_t Display_SendCmd(uint8_t cmd) {
 
     gpio_put(DISPLAY_CS, 0);        // start SPI frame

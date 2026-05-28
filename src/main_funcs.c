@@ -64,14 +64,14 @@ ExitCode_t init(void) {
     
     activateInternalPullUpResistors();
 
-    if (initDisplayController() == FAIL) {
-        return FAIL;
-    }
+
     
     if (GYA_Init()) {
         return FAIL;
     }
 
+
+    // Display_Init();
     Haptic_Init();
 
     Buttons_Init();
@@ -80,21 +80,24 @@ ExitCode_t init(void) {
     Stepper_Init(&s_stepper);
     Pedometer_Init(&s_pedometer);
     
-    Frame_Init(&s_frame, Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
+    // Frame_Init(&s_frame, Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
 
     return SUCCESS;
 }
 
+// FILIP 28.05.2026:
+// Este 4:15 AM si ziua asta trebuie sa prezint proiectul
+// Tocmai ce am topit o parte din buzzer cu ciocanul de lipit
+// A trebuit sa tai firele de la display ca sa imi dau commit la ideea ca NU vom avea display pe masina
+// rip display thread.
 void displayLoop(void) {
 
-    PigeonStates pigeonState = 0;
     while (1) {
         
-        pigeonState = (pigeonState + 1) % 3;
-
-        Frame_UpdateState(&s_frame, pigeonState);
-        Frame_DrawPigeon(&s_frame);
+        sleep_ms(300);
         
+        // Frame_DrawPigeon(&s_frame);
+        // Frame_DrawText(&s_frame);
         // nush exact daca e nevoie de delay, 
         // activeaza in caz de flickering ig
         // sleep_ms(100);
@@ -102,28 +105,28 @@ void displayLoop(void) {
 }
 
 ExitCode_t mainLoop(void) {
-    PigeonStates pigeonState = PIGEON_IDLE;
     Buzzer_PlayStartupSound();
     Haptic_Vibrate(700, HAPTIC_VIBR_LOW);
     sleep_ms(2000);
     Haptic_Vibrate(700, HAPTIC_VIBR_MED);
-    sleep_ms(2000);
-    Haptic_Vibrate(700, HAPTIC_VIBR_HIGH);
 
     while (1) {
         
         if (Stepper_DetectStep(&s_stepper)) {
-            pigeonState = PIGEON_WINGS;
+            Buzzer_PlayGoodSound();
             Pedometer_AddStep(&s_pedometer);
-        } else {
-            pigeonState = PIGEON_IDLE;
-        }
+        } 
+
         VLOG("Level: %zu; Pasi: %zu;\n", Pedometer_GetLevel(&s_pedometer), Pedometer_GetSteps(&s_pedometer));
         
-        Frame_UpdateState(&s_frame, pigeonState);
-        Frame_UpdateSteps(&s_frame, Pedometer_GetSteps(&s_pedometer));
-        Frame_UpdateLevel(&s_frame, Pedometer_GetLevel(&s_pedometer));
-        
+        // Frame_UpdateSteps(&s_frame, Pedometer_GetSteps(&s_pedometer));
+        // Frame_UpdateLevel(&s_frame, Pedometer_GetLevel(&s_pedometer));
+        // if (pigeonWingsMs > 0) {
+        //     Frame_UpdateState(&s_frame, PIGEON_WINGS);
+        //     pigeonWingsMs -= 1;
+        // } else {
+        //     Frame_UpdateState(&s_frame, PIGEON_IDLE);
+        // }
     }
 
     return FAIL; // Teoretic, bucla infinita nu ar trebui să ajunga niciodata aici
@@ -138,24 +141,7 @@ static ExitCode_t initBuzzerPins() {
     return SUCCESS;
 }
 
-static ExitCode_t initDisplayPins() {
-    gpio_set_function(DISPLAY_CLK, GPIO_FUNC_SPI);
-    gpio_set_function(DISPLAY_SDA, GPIO_FUNC_SPI);
-    
-    // DC, RES si CS trebuie initializat normal
-    gpio_init(DISPLAY_DC);
-    gpio_set_dir(DISPLAY_DC, GPIO_OUT);
 
-    gpio_init(DISPLAY_RES);
-    gpio_set_dir(DISPLAY_RES, GPIO_OUT);
-
-    gpio_init(DISPLAY_CS);
-    gpio_set_dir(DISPLAY_CS, GPIO_OUT);
-    
-    gpio_put(DISPLAY_CS, SPI_END_COM);
-    
-    return SUCCESS;
-}
 
 static void initGyroaccelPins(void) {
     gpio_set_function(GYA_SDA_PIN, GPIO_FUNC_I2C);
@@ -170,10 +156,6 @@ static void initGyroaccelPins(void) {
 static ExitCode_t initPins(void) {
     if (initBuzzerPins()) {
         LOG("initBuzzerPins(): Nu s-a putut initializa buzzerul\n");
-    }
-
-    if (initDisplayPins()) {
-        LOG("initDisplayPins(): Nu s-a putut initializa displayul\n");
     }
     
     initGyroaccelPins();
@@ -191,51 +173,6 @@ static ExitCode_t activateInternalPullUpResistors() {
     // activam rezistentele pull-up interne ale pico
     gpio_pull_up(GYA_SDA_PIN);
     gpio_pull_up(GYA_SCL_PIN);
-    return SUCCESS;
-}
-
-static ExitCode_t initDisplayController() {
-    gpio_put(DISPLAY_RES, 1);
-    sleep_ms(10);
-
-    gpio_put(DISPLAY_RES, 0);
-    sleep_ms(50);
-
-    gpio_put(DISPLAY_RES, 1);
-    sleep_ms(120);
-
-    Display_SendCmd(0x01); // SWRESET
-    sleep_ms(150);
-
-    Display_SendCmd(0x11); // SLPOUT
-    sleep_ms(120);
-
-    // --- SETARE CULOARE: COLMOD (0x3A) = 0x55 (16-bit) ---
-    gpio_put(DISPLAY_CS, 0); // CS LOW fix pentru această comandă + parametru
-    uint8_t cmd_colmod = 0x3A; 
-    uint8_t arg_colmod = 0x55; // RGB565
-    gpio_put(DISPLAY_DC, 0);
-    spi_write_blocking(DISPLAY_SPI_PORT, &cmd_colmod, 1);
-    gpio_put(DISPLAY_DC, 1);
-    spi_write_blocking(DISPLAY_SPI_PORT, &arg_colmod, 1);
-    gpio_put(DISPLAY_CS, 1); // CS HIGH
-
-    // --- SETARE ORIENTARE: MADCTL (0x36) = 0x00 ---
-    gpio_put(DISPLAY_CS, 0);
-    uint8_t cmd_madctl = 0x36;
-    uint8_t arg_madctl = 0x00;
-    gpio_put(DISPLAY_DC, 0);
-    spi_write_blocking(DISPLAY_SPI_PORT, &cmd_madctl, 1);
-    gpio_put(DISPLAY_DC, 1);
-    spi_write_blocking(DISPLAY_SPI_PORT, &arg_madctl, 1);
-    gpio_put(DISPLAY_CS, 1);
-
-    Display_SendCmd(0x21); // INVON (Inversare culori)
-    Display_SendCmd(0x13); // NORON (Normal display)
-    sleep_ms(10);
-    Display_SendCmd(0x29); // DISPON (Pornește ecranul)
-    sleep_ms(120);
-
     return SUCCESS;
 }
 
