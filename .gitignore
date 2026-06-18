@@ -1,3 +1,4 @@
 *.pio
 ./.vscode/
 ./src/.vscode/
+src/Testing/Temporary/
